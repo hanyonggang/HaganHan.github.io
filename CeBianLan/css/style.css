@@ -1,0 +1,9 @@
+#div1{
+    width: 100px;
+    height: 100px;
+    background-color: #bbb;
+    position: absolute;
+}
+body{
+    height: 5000px;
+}

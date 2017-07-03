@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>如何高效渲染几何体</title>
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        .stats {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="div-canvas_par"></div>
+
+<script src="./../public/js/three.js"></script>
+<script src="./../public/js/stats.js"></script>
+<script>
+
+    class Fn3D {
+
+        constructor(eDivCanvasPar) {
+
+            this.eDivCanvasPar = eDivCanvasPar;
+
+            this.scene = Object;
+            this.camera = Object;
+            this.renderer = Object;
+            this.light = Object;
+            this.mesh = Object;
+            this.stats = Object;
+
+            this.fnInit();
+
+        }
+
+        fnInit() {
+
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnSetMesh();
+            this.fnSetStats();
+
+        }
+
+        fnSetScene() {
+
+            this.scene = new THREE.Scene();
+
+        }
+
+        fnSetCamera() {
+
+            this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 10000);
+
+            this.camera.position.x = 0;
+            this.camera.position.y = 0;
+            this.camera.position.z = 2000;
+
+            this.camera.up.x = 0;
+            this.camera.up.y = 1;
+            this.camera.up.z = 0;
+
+            this.camera.lookAt({
+                x: 0,
+                y: 0,
+                z: 0
+            });
+
+            this.scene.add(this.camera);
+
+        }
+
+        fnSetRenderer() {
+
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: false//平滑锯齿感(性能不好)
+            });
+            this.renderer.setClearColor(0xffffff);
+            this.renderer.setSize(innerWidth, innerHeight);
+
+            this.eDivCanvasPar.appendChild(this.renderer.domElement);
+
+        }
+
+        fnSetLight() {
+
+            this.light = new THREE.DirectionalLight(0xffffff);
+            this.light.position.set(40, 50, 30);
+            this.scene.add(this.light);
+
+        }
+
+        fnSetMesh() {
+
+            const This = this;
+
+            /*start创建三角形代码*/
+            const triangles = 1600000;
+
+            const bufferGeometry = new THREE.BufferGeometry();
+
+            const position = new Float32Array(triangles * 3 * 3);
+
+            //每个顶点一个法线
+            const normals = new Float32Array(triangles * 3 * 3);
+
+            //每个顶点一个颜色
+            const colors = new Float32Array(triangles * 3 * 3);
+
+            const color=new THREE.Color();
+
+            const n=800,
+                    n2=n/2,
+                    d=12,
+                    d2=d/2;
+
+            let pointA=new THREE.Vector3(),
+                    pointB=new THREE.Vector3(),
+                    pointC=new THREE.Vector3();
+
+            let cb=new THREE.Vector3(),
+                    ab=new THREE.Vector3();
+
+            for(let i=0;i<position.length;i += 9){
+
+                const x=Math.random()*n-n2,
+                        y=Math.random()*n-n2,
+                        z=Math.random()*n-n2;
+
+                const ax=x+Math.random()*d-d2,
+                        ay=y+Math.random()*d-d2,
+                        az=z+Math.random()*d-d2;
+
+                const bx=x+Math.random()*d-d2,
+                        by=y+Math.random()*d-d2,
+                        bz=z+Math.random()*d-d2;
+
+                const cx=x+Math.random()*d-d2,
+                        cy=y+Math.random()*d-d2,
+                        cz=z+Math.random()*d-d2;
+
+                //A点
+                position[i]=ax;
+                position[i+1]=ay;
+                position[i+2]=az;
+
+                //B点
+                position[i+3]=bx;
+                position[i+4]=by;
+                position[i+5]=bz;
+
+                //C点
+                position[i+6]=cx;
+                position[i+7]=cy;
+                position[i+8]=cz;
+
+                //设置点坐标
+                pointA.set(ax,ay,az);
+                pointB.set(bx,by,bz);
+                pointC.set(cx,cy,cz);
+
+                /*start求出垂直于顶点所在的三角形平面的法线向量*/
+
+                //向量的减法
+                cb.subVectors(pointC,pointB);
+                ab.subVectors(pointA,pointB);
+
+                //正交向量
+                //设置垂直与cb,ab的向量, 也就是cb与ab所组成的平面的法线, 法线设置在了cb上
+                cb.cross( ab );
+
+                //向量归一化(按比例缩小到单位长度1, 方向不变)
+                //把向量归一化,就是让他长度=1
+                cb.normalize();
+
+                //设置每个顶点对应一个法线(把向量存到法线里面)
+                //A点的法线
+                normals[i]=cb.x;
+                normals[i+1]=cb.y;
+                normals[i+2]=cb.z;
+
+                //B点的法线
+                normals[i+3]=cb.x;
+                normals[i+4]=cb.y;
+                normals[i+5]=cb.z;
+
+                //C点的法线
+                normals[i+6]=cb.x;
+                normals[i+7]=cb.y;
+                normals[i+8]=cb.z;
+
+                /*end求出垂直于顶点所在的三角形平面的法线向量*/
+
+                /*start为每个顶点赋值一种颜色*/
+                var vx = ( x / n ) + 0.5;
+                var vy = ( y / n ) + 0.5;
+                var vz = ( z / n ) + 0.5;
+
+                color.setRGB(vx,vy,vz);
+
+                colors[i]=color.r;
+                colors[i+1]=color.g;
+                colors[i+2]=color.b;
+
+                colors[i+3]=color.r;
+                colors[i+4]=color.g;
+                colors[i+5]=color.b;
+
+                colors[i+6]=color.r;
+                colors[i+7]=color.g;
+                colors[i+8]=color.b;
+
+                bufferGeometry.addAttribute("position",new THREE.BufferAttribute(position,3));
+                bufferGeometry.addAttribute("normal",new THREE.BufferAttribute(normals,3));
+                bufferGeometry.addAttribute("color",new THREE.BufferAttribute(colors,3));
+
+                /*end为每个顶点赋值一种颜色*/
+
+            }
+
+            //计算包围盒大小
+            bufferGeometry.computeBoundingSphere();
+
+            /*end创建三角形代码*/
+
+            const meshPhongMaterial=new THREE.MeshPhongMaterial({
+                color:0xaaaaaa,
+                specular:0xffffff,
+                shininess:250,
+                side:THREE.DoubleSide,
+                vertexColors:THREE.VertexColors
+            });
+
+            this.mesh = new THREE.Mesh(bufferGeometry, meshPhongMaterial);
+
+            this.scene.add(this.mesh);
+
+        }
+
+        fnSetStats() {
+
+            this.stats = new Stats();
+            this.stats.domElement.className = "stats";
+            document.body.appendChild(this.stats.domElement)
+
+        }
+
+        fnRender() {
+
+            const This = this;
+
+            function animation() {
+
+                This.stats.begin();
+
+                This.mesh.rotation.x+=0.009;
+                This.mesh.rotation.y+=0.007;
+
+                This.renderer.render(This.scene, This.camera);
+
+                requestAnimationFrame(animation);
+
+                This.stats.end();
+
+            }
+
+            animation();
+
+        }
+
+    }
+
+    const oop3D = new Fn3D(document.querySelector("#div-canvas_par"));
+    oop3D.fnRender();
+
+</script>
+</body>
+</html>

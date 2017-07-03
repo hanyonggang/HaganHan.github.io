@@ -1,0 +1,48 @@
+#boxOne1{
+    width: 1000px;
+    background-color: #fff;
+    height: 300px;
+    margin: 50px auto;
+    position: relative;
+}
+.a1{
+    position: absolute;
+    left: 1px;
+    top: 116px;
+    float: left;
+    width: 68px;
+    height: 68px;
+    display: block;
+    background-image: url(../images/btn.jpg);
+    background-position: right bottom;
+}
+.a2{
+    position: absolute;
+    right: 1px;
+    top: 116px;
+    float: right;
+    width: 68px;
+    height: 68px;
+    display: block;
+    background-image: url(../images/btn.jpg);
+    background-position: left bottom;
+}
+#boxTwo1{
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    height: 240px;
+}
+ul{
+    position: absolute;
+    top: 94px;
+    left: 1px;
+}
+li{
+    float: left;
+    padding-right: 20px;
+    cursor: pointer;
+}
+li:hover{
+    padding-top: 5px;
+}

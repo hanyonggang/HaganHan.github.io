@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贴图</title>
+</head>
+<body>
+<div id="div-canvas_par"></div>
+<script src="./../public/js/three.js"></script>
+<script>
+
+    class Fn3D {
+
+        constructor(eDivCanvasPar){
+
+            this.eDivCanvasPar=eDivCanvasPar;
+
+            this.scene=Object;
+            this.camera=Object;
+            this.renderer=Object;
+            this.light=Object;
+            this.mesh=Object;
+
+            this.init();
+
+        }
+
+        init(){
+
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnSetMesh();
+
+        }
+
+        fnSetScene(){
+
+            this.scene=new THREE.Scene();
+
+        }
+
+        fnSetCamera(){
+
+            this.camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,1,10000);
+            this.camera.position.x=0;
+            this.camera.position.y=0;
+            this.camera.position.z=600;
+            this.scene.add(this.camera);
+
+        }
+
+        fnSetRenderer(){
+
+            this.renderer=new THREE.WebGLRenderer();
+            this.renderer.setClearColor("#ffffff");
+            this.renderer.setSize(innerWidth,innerHeight);
+            document.body.appendChild(this.renderer.domElement);
+
+        }
+
+        fnSetLight(){
+
+            this.light=new THREE.AmbientLight(0xffffff);
+            this.scene.add(this.light);
+
+        }
+
+        fnSetMesh(){
+
+            const This=this;
+
+            let loading=0;
+            const planeGeometry=new THREE.PlaneGeometry(512,256);
+            const textureLoader=new THREE.TextureLoader();
+            textureLoader.load("./../public/image/1.jpg",function (texture) {
+
+                const meshBasicMaterial=new THREE.MeshBasicMaterial({
+                    map:texture
+                });
+                texture.repeat.x=4;
+                texture.repeat.y=3;
+                texture.wrapS=THREE.RepeatWrapping;
+                texture.wrapT=THREE.RepeatWrapping;
+
+                This.mesh=new THREE.Mesh(planeGeometry,meshBasicMaterial);
+
+                This.scene.add(This.mesh);
+                This.fnRender(texture);
+
+            },function () {
+                console.log(loading++);
+            },function () {
+                console.log("加载存在错误");
+            });
+
+        }
+
+        fnRender(texture){
+
+            const This=this;
+            function fn() {
+                texture.offset.x+=0.01;
+                This.renderer.render(This.scene,This.camera);
+                requestAnimationFrame(fn);
+            }
+            fn();
+
+        }
+
+    }
+
+    const oop3D=new Fn3D(document.querySelector("#div-canvas_par"));
+
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="div-canvas_par"></div>
+
+<script src="./../public/js/three.js"></script>
+<script src="./../public/js/OBJLoader.js"></script>
+<script>
+    let ob;
+    class FnObjLoader {
+
+        constructor(eDivCanvasPar) {
+
+            this.eDivCanvasPar = eDivCanvasPar;
+
+            this.scene = Object;
+            this.camera = Object;
+            this.renderer = Object;
+            this.light = Object;
+            this.mesh = Object;
+
+            this.fnInit();
+
+        }
+
+        fnInit() {
+
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnSetMesh();
+
+        }
+
+        fnSetScene() {
+
+            this.scene = new THREE.Scene();
+
+        }
+
+        fnSetCamera() {
+
+            this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 10000);
+
+            this.camera.position.x = 0;
+            this.camera.position.y = 0;
+            this.camera.position.z = 400;
+
+            this.camera.up.x = 0;
+            this.camera.up.y = 1;
+            this.camera.up.z = 0;
+
+            this.camera.lookAt({
+                x: 0,
+                y: 0,
+                z: 0
+            });
+
+            this.scene.add(this.camera);
+
+        }
+
+        fnSetRenderer() {
+
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: false//平滑锯齿感(性能不好)
+            });
+            this.renderer.setClearColor(0xffffff);
+            this.renderer.setSize(innerWidth, innerHeight);
+
+            this.eDivCanvasPar.appendChild(this.renderer.domElement);
+
+        }
+
+        fnSetLight() {
+
+            this.light = new THREE.AmbientLight(0xffffff);
+            this.light.position.set(1, 1, 1);
+            this.scene.add(this.light);
+
+        }
+
+        fnSetMesh() {
+
+            const This = this;
+
+            const texture = new THREE.Texture();
+            const texture2 = new THREE.Texture();
+
+            const loadingManager = new THREE.LoadingManager();
+            loadingManager.onProgress = function (item, loaded, total) {
+                console.log(`加载所有资源进度:${loaded / total * 100}%`);
+            };
+
+            const imageLoader = new THREE.ImageLoader(loadingManager);
+            imageLoader.load("./../public/image/2.jpg", function (image) {
+                texture.image = image;
+                texture.needsUpdate = true;
+            });
+            imageLoader.load("./../public/image/3.jpg", function (image) {
+                texture2.image = image;
+                texture2.needsUpdate = true;
+            });
+
+            const objLoader = new THREE.OBJLoader(loadingManager);
+            let num;
+            objLoader.load("./../public/obj/male02.obj", function (obj) {
+
+                obj.traverse(function (child) {
+
+                    if (child instanceof THREE.Mesh) {
+
+                        if (num % 2 === 0) {
+                            child.material.map = texture;
+                        } else {
+                            child.material.map = texture2;
+                        }
+
+                        num++
+
+                    }
+
+                });
+
+                obj.position.y-=100;
+                This.scene.add(obj);
+                This.fnRender();
+
+            }, function (ev) {
+                if (ev.lengthComputable) {
+                    console.log(`加载OBJ模型进度:${Math.round(ev.loaded / ev.total * 100)}%`);
+                }
+            });
+
+        }
+
+        fnRender() {
+
+            this.renderer.render(this.scene, this.camera);
+
+        }
+
+    }
+
+    const oop3D = new FnObjLoader(document.querySelector("#div-canvas_par"));
+
+</script>
+</body>
+</html>

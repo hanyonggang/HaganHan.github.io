@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,user-scalable=no,target-densitydpi=medium-dpi">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script src="hanQuery2.0.js"></script>
+    <script src="function.js"></script>
+    <script>
+        window.onload= function () {
+            var oDiv1=$("#div");
+            var oBtn=$("#btn");
+            var oop3DPaper=new Fn3DPaper(oDiv1,20,"11.jpg",240,240,500,200);
+            oop3DPaper.init({//配置参数
+
+            });
+            oDiv1.onclick= function () {
+                oop3DPaper.close(1000,0);
+            };
+            oBtn.onclick= function () {
+                oop3DPaper.open(1000,0);
+            };
+        };
+    </script>
+</head>
+<body>
+    <div id="div">
+
+    </div>
+    <button id="btn">按钮</button>
+</body>
+</html>

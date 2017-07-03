@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>加载一个OBJ模型</title>
+</head>
+<body>
+<div id="div-canvas_par"></div>
+<script src="./../public/js/three.js"></script>
+<script>
+
+    const texture=new THREE.Texture();
+
+    const loadingManager=new THREE.LoadingManager();
+    loadingManager.onProgress=function (item, loaded, total) {//加载的过程函数
+        console.log(arguments[0],arguments[1],arguments[2]);
+    };
+
+    const imageLoader=new THREE.ImageLoader(loadingManager);
+    imageLoader.load("./../public/image/2.jpg",function (image) {
+        texture.image=image;
+        texture.needsUpdate=true;
+    },function (ev) {
+        console.log(ev);
+    });
+
+</script>
+</body>
+</html>

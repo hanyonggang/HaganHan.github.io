@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>HTML5 canvas动画小效果</title>
+    <meta name="viewport" content="width=640,user-scalable=no">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            overflow: hidden;
+        }
+    </style>
+    <script src="easelJS.0.8.2.js"></script>
+    <script>
+        window.onload= function () {
+            var oCanvas=document.getElementById("canvas");
+            oCanvas.width=document.documentElement.clientWidth;
+            oCanvas.height=document.documentElement.clientHeight;
+            var stage=new createjs.Stage(oCanvas);
+
+            //开启触摸事件
+            createjs.Touch.enable(stage);
+
+
+            var container=new createjs.Container();
+            stage.addChild(container);
+            var aTween=[];
+            for(var i=0;i<25;i++){
+
+                //创建
+                var circle=new createjs.Shape();
+
+                //边框宽度15
+                circle.graphics.setStrokeStyle(15);
+
+                //边框颜色
+                circle.graphics.beginStroke("#113355");
+
+                //绘制
+                circle.graphics.drawCircle(0,0,(i+1)*4);
+
+                //调亮度
+                circle.compositeOperation="Lighter";
+
+                container.addChild(circle);
+
+                //运动
+                var tween=new createjs.Tween.get(circle)
+                        .to({"x":300,"y":200},(0.5+i*0.04)*1500,createjs.Ease.bounceInOut);
+                aTween.push({"shape":circle,"animate":tween});
+            }
+            stage.addEventListener("pressmove", function (ev) {
+                for(var i=0;i<25;i++){
+                    var circle=aTween[i].shape;
+                    createjs.Tween.get(circle)
+                            .to({"x":ev.localX,"y":ev.localY},(0.5+i*0.04)*1500,createjs.Ease.bounceInOut)
+
+                }
+            });
+            createjs.Ticker.setFPS(30);
+            createjs.Ticker.addEventListener("tick",stage)
+        };
+    </script>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+</html>

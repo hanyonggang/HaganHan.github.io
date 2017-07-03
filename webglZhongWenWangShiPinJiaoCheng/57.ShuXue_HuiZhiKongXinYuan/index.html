@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数学-绘制空心半圆</title>
+</head>
+<body>
+
+<div id="div-canvas_par"></div>
+
+<script src="./../public/js/three.js"></script>
+<script>
+
+    class FnDrawHalfCircle {
+
+        constructor(eDivCanvasPar){
+
+            this.eDivCanvasPar=eDivCanvasPar;
+
+            this.oScene=Object;
+            this.oCamera=Object;
+            this.oRenderer=Object;
+            this.oLight=Object;
+            this.oLine=Object;
+
+            this.settings={//默认参数
+                nCanvasWidth:document.documentElement.clientWidth,
+                nCanvasHeight:document.documentElement.clientHeight,
+                sClearColor:"#aaaaaa"
+            };
+
+        }
+
+        init(){
+
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnSetLine();
+            this.fnRenderer();
+
+        }
+
+        fnSetScene(){
+
+            this.oScene=new THREE.Scene();
+
+        }
+
+        fnSetCamera(){
+
+            this.oCamera=new THREE.PerspectiveCamera(45,this.settings.nCanvasWidth/this.settings.nCanvasHeight,1,100);
+            this.oCamera.position.x=0;
+            this.oCamera.position.y=0;
+            this.oCamera.position.z=90;
+            this.oCamera.up.x=0;
+            this.oCamera.up.y=1;
+            this.oCamera.up.z=0;
+            this.oCamera.lookAt({
+                x:0,
+                y:0,
+                z:0
+            });
+
+            this.oScene.add(this.oCamera);
+
+        }
+
+        fnSetRenderer(){
+
+            this.oRenderer=new THREE.WebGLRenderer();
+            this.oRenderer.setSize(this.settings.nCanvasWidth,this.settings.nCanvasHeight);
+            this.oRenderer.setClearColor(this.settings.sClearColor);
+            this.eDivCanvasPar.appendChild(this.oRenderer.domElement);
+
+        }
+
+        fnSetLight(){
+
+            this.oLight=new THREE.DirectionalLight(0xffffff,1);
+            this.oLight.position.set(60,130,100);
+
+            this.oScene.add(this.oLight);
+
+        }
+
+        fnSetLine(){
+
+            const oHalfCircleShape=new THREE.Shape();//定义形状对象
+            oHalfCircleShape.moveTo(30,0);//定义起点
+            oHalfCircleShape.quadraticCurveTo( 0, 30, -30, 0 );//定义贝塞尔曲线
+
+            const oHalfCirclePointsGeometry=oHalfCircleShape.createPointsGeometry(10);//得到自定义的形状的Geometry 50为分段数量
+            const oHalfCircleLineBasicMaterial=new THREE.LineBasicMaterial({color:0xff000f});//定义材质
+
+            this.oLine=new THREE.Line(oHalfCirclePointsGeometry,oHalfCircleLineBasicMaterial);
+            this.oLine.position.set(0,0,0);
+
+            this.oScene.add(this.oLine);
+
+        }
+
+        fnRenderer(){
+
+            this.oRenderer.render(this.oScene,this.oCamera);
+
+        }
+
+    }
+
+    const eDIvCanvasPar=document.querySelector("#div-canvas_par");
+
+    const oopDrawHalfCircle=new FnDrawHalfCircle(eDIvCanvasPar);
+    oopDrawHalfCircle.init();
+
+</script>
+
+</body>
+</html>

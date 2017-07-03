@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>旋转obj模型</title>
+</head>
+<body>
+
+<div id="div-canvas_par"></div>
+
+<script src="./../public/js/three.js"></script>
+<script src="./../public/js/OBJLoader.js"></script>
+<script>
+    
+    class FnHover {
+
+        constructor(eDivCanvasPar) {
+
+            this.eDivCanvasPar = eDivCanvasPar;
+
+            this.scene = Object;
+            this.camera = Object;
+            this.renderer = Object;
+            this.light = Object;
+            this.mesh = Object;
+            this.group=Object;
+            this.obj=false;
+            this.groupModel=false;
+            this.box3=false;
+
+            this.fnInit();
+
+        }
+
+        fnInit() {
+
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnSetMesh();
+            this.fnSetGridHelper();
+            this.fnSetObj();
+            this.fnAxisHelper();
+
+        }
+
+        fnSetScene() {
+
+            this.scene = new THREE.Scene();
+
+        }
+
+        fnSetCamera() {
+
+            this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 10000);
+
+            this.camera.position.x = 100;
+            this.camera.position.y = 300;
+            this.camera.position.z = 700;
+
+            this.camera.up.x = 0;
+            this.camera.up.y = 1;
+            this.camera.up.z = 0;
+
+            this.camera.lookAt({
+                x: 0,
+                y: 0,
+                z: 0
+            });
+
+            this.scene.add(this.camera);
+
+        }
+
+        fnSetRenderer() {
+
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: false//平滑锯齿感(性能不好)
+            });
+            this.renderer.setClearColor(0xffffff);
+            this.renderer.setSize(innerWidth, innerHeight);
+
+            this.eDivCanvasPar.appendChild(this.renderer.domElement);
+
+        }
+
+        fnSetLight() {
+
+            this.light = new THREE.DirectionalLight(0xffffff);
+            this.light.position.set(100,90,80);
+            this.scene.add(this.light);
+
+        }
+
+        fnSetMesh() {
+
+            const boxGeometry=new THREE.BoxGeometry(30,30,30);
+
+            const meshLambertMaterial=new THREE.MeshLambertMaterial({color:0x0000ff});
+
+            this.mesh=new THREE.Mesh(boxGeometry,meshLambertMaterial);
+
+            this.scene.add(this.mesh);
+
+        }
+
+        fnSetGridHelper(){
+
+            const gridHelper=new THREE.GridHelper(1000,50,0x0000ff,0x00ffff);
+            this.scene.add(gridHelper);
+
+        }
+
+        fnSetObj(){
+
+            const This=this;
+
+            const loadingManager=new THREE.LoadingManager();
+            const objLoader=new THREE.OBJLoader(loadingManager);
+            objLoader.load("./../public/obj/model.obj",function (obj) {
+                This.obj=obj;
+                This.scene.add(obj);
+            });
+
+        }
+
+        fnAxisHelper(){
+
+            const This=this;
+
+            const axisHelperBox=new THREE.AxisHelper(100);
+            axisHelperBox.position.copy(this.mesh.position);
+            this.scene.add(axisHelperBox);
+
+            let num=0;
+            const timer=setInterval(function () {
+                document.title=num++;
+                if(This.obj){
+
+                    const boxHelper=new THREE.BoxHelper(This.obj);
+                    This.scene.add(boxHelper);
+
+                    This.groupModel=new THREE.Group();
+                    This.groupModel.add(This.obj);
+                    This.scene.add(This.groupModel);
+
+                    This.box3=new THREE.Box3().setFromObject(This.obj);
+                    This.box3.center(This.obj.position);
+                    This.obj.position.multiplyScalar(-1);
+                    This.box3.center(This.groupModel.position);
+
+                    const axisHelperModel=new THREE.AxisHelper(100);
+                    axisHelperModel.position.copy(This.groupModel.position);
+                    This.scene.add(axisHelperModel);
+
+                    clearInterval(timer);
+                }
+            });
+
+        }
+
+        fnRender() {
+
+            const This=this;
+
+            function animation() {
+
+                if(This.groupModel){
+                    This.groupModel.rotateY(0.01);
+                }
+                This.mesh.rotateY(0.01);
+                This.renderer.render(This.scene, This.camera);
+
+                requestAnimationFrame(animation);
+
+            }
+
+            animation();
+
+        }
+
+    }
+
+    const oop3D = new FnHover(document.querySelector("#div-canvas_par"));
+    oop3D.fnRender();
+
+</script>
+</body>
+</html>

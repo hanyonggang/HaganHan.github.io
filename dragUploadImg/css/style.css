@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+div {
+    background-color: #ccc;
+    height: 300px;
+}
+img {
+    width: 100px;
+}
+li {
+    float: left;
+    list-style: none;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        body {
+            margin: 0;
+        }
+
+        .g-article {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .g-load {
+            width:120px;
+            height:140px;
+        }
+
+        .u-bg {
+            width:120px;
+            height:100px;
+            background-image: url(./images/loading3.png);
+            background-repeat:no-repeat;
+            position: relative;
+            animation: 0.5s translate infinite linear alternate;
+        }
+
+        .u-center {
+            width:120px;
+            height:100px;
+            position: absolute;
+            left:0;
+            top:0;
+            background-image: url(./images/loading4.png);
+            background-repeat:no-repeat;
+            animation: 1s rotate_p infinite linear;
+        }
+
+        .u-arc_line {
+            width:120px;
+            height:100px;
+            position: absolute;
+            left:0;
+            top:0;
+            background-image: url(./images/loading5.png);
+            background-repeat:no-repeat;
+            animation: 1s rotate_n infinite linear;
+        }
+
+        .u-text {
+            width:120px;
+            height:100px;
+            position: absolute;
+            left:0;
+            top:0;
+            font: 18px/100px Arial;
+            text-align: center;
+            color: #f39;
+        }
+
+        .u-shadow {
+            width: 100px;
+            height: 40px;
+            margin: 0 auto;
+            background: -webkit-radial-gradient(contain,rgba(0,0,0,0.5),rgba(0,0,0,0));
+            animation: 0.5s shadow infinite linear alternate;
+        }
+
+        @keyframes rotate_p {
+
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(-360deg);
+            }
+
+        }
+        @keyframes rotate_n {
+
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+
+        }
+        @keyframes translate {
+
+            0% {
+                transform: translateY(0px);
+            }
+            100% {
+                transform: translateY(10px);
+            }
+
+        }
+        @keyframes shadow {
+
+            0% {
+                transform: scale(0.6);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+
+        }
+
+    </style>
+</head>
+<body>
+
+<article id="article" class="g-article">
+    <div class="g-load">
+        <div class="u-bg animation">
+            <div class="u-center animation"></div>
+            <div class="u-arc_line animation"></div>
+            <div id="text" class="u-text">0%</div>
+        </div>
+        <div class="u-shadow animation"></div>
+    </div>
+</article>
+
+<script>
+
+    const eArticle=document.querySelector("#article");
+    eArticle.style.height=`${document.documentElement.clientHeight}px`;
+
+    const aImgSec=[
+            "http://img3.iqilu.com/data/attachment/forum/pw/Mon_1111/307_259519_df1138fbb9b0b78.jpg",
+            "http://youimg1.c-ctrip.com/target/tg/280/582/300/af0b49685e6349499019c3d4ebe69a4d.jpg",
+            "http://img3.iqilu.com/data/attachment/forum/pw/Mon_1111/307_259519_7907380cce4ea2e.jpg",
+            "http://img.pconline.com.cn/images/upload/upc/tx/photoblog/1502/05/c4/2766901_1423108319216.jpg",
+            "http://img3.iqilu.com/data/attachment/forum/pw/Mon_1111/307_259519_888742e7f740d5b.jpg"
+    ];
+
+    const eText=document.querySelector("#text");
+    let num=1;
+
+    const eAnimationS=document.querySelectorAll(".animation");
+
+    for(let i=0;i<aImgSec.length;i++){
+
+        const oImg=document.createElement("img");
+        oImg.src=aImgSec[i];
+        oImg.onload=function () {
+            eText.innerHTML=num++/aImgSec.length*100+"%";
+            if(num-1===aImgSec.length){
+                for(let j=0;j<eAnimationS.length;j++){
+                    eAnimationS[j].style.animationPlayState="paused";
+                }
+            }
+        };
+
+    }
+
+</script>
+</body>
+</html>

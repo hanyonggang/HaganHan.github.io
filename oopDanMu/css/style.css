@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+#div {
+    width: 1024px;
+    height: 400px;
+    background-image: url(../images/img.jpg);
+    background-repeat: no-repeat;
+    background-position: 0 -100px;
+    margin: 10px;
+    position: relative;
+    overflow: hidden;
+}
+#div p {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 0 10px;
+    height: 26px;
+    line-height: 26px;
+    margin: 0;
+    width: auto;
+    overflow: hidden;
+}
+#btn {
+    margin-left: 10px;
+}
+#form {
+    display: none;
+}
+#input {
+    border: 1px solid #f0f;
+    width: 600px;
+    text-align: center;
+}
+#big {
+    width: 1024px;
+    height: 400px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    background-color: #000000;
+    opacity: 0;
+    transition: 1s opacity;
+    display: none;
+}

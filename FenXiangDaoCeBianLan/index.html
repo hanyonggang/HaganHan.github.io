@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="css/cube.css">
+    <style>
+        #div1{
+            width: 100px;
+            height: 200px;
+            background-color: #999999;
+            position: absolute;
+            left: -94px;
+            top: 100px;
+            opacity: 0.3;
+        }
+        span{
+            padding: 6px 0;
+            width: 24px;
+            height: 48px;
+            line-height: 16px;
+            font-size: 14px;
+            position: absolute;
+            left: 100px;
+            top: 70px;
+            background-color:#999999;
+            text-align: center;
+        }
+        #btn{
+            position: absolute;
+        }
+    </style>
+    <script src="js/function.js"></script>
+    <script>
+        window.onload= function () {
+            var oDiv=document.getElementById('div1');
+            oDiv.onmouseover= function () {
+                startLeftMove(oDiv,0,10,-20)
+            };
+            oDiv.onmouseout= function () {
+                startLeftMove(oDiv,-94,10,-20)
+            };
+            var oBtn=document.getElementById('btn');
+            oBtn.onclick= function (str) {
+                startTopMove(oBtn,300,10,-10);
+                str.cancelBubble=true;
+            };
+            document.onclick= function () {
+                startTopMove(oBtn,0,2,-10)
+            };
+        };
+    </script>
+</head>
+<body>
+    <div id="div1">
+        <span>分享到</span>
+    </div>
+    <button id="btn">按钮</button>
+</body>
+</html>

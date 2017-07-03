@@ -1,0 +1,1 @@
+修改javascript.js文件的endTime常量为想要的倒计时目标时间( 按照注释提示修改保存,然后刷新index.html页面即可查看效果 );

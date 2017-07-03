@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="reset.css">
+    <style>
+        ul {
+            padding: 50px;
+        }
+        li {
+            float: left;
+            padding: 0 15px;
+            perspective: 100px;
+        }
+        a {
+            position: relative;
+            font: 14px/30px "宋体";
+            float: left;
+            transform-style: preserve-3d;
+            transition: 1s;
+            transform-origin: center center -15px;
+        }
+        span {
+            width: 60px;
+            text-align: center;
+            display: inline-block;
+            backface-visibility: hidden;
+        }
+        span:nth-of-type(2) {
+            position: absolute;
+            left:0;
+            top: -30px;
+            transform-origin:bottom ;
+            transform: rotateX(90deg);
+        }
+        a:hover {
+            transform: rotateX(-90deg);
+        }
+    </style>
+</head>
+<body>
+<ul>
+    <li>
+        <a href="javascript:;">
+            <span>选项一</span>
+            <span>选项1</span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:;">
+            <span>选项二</span>
+            <span>选项2</span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:;">
+            <span>选项三</span>
+            <span>选项3</span>
+        </a>
+    </li>
+</ul>
+</body>
+</html>

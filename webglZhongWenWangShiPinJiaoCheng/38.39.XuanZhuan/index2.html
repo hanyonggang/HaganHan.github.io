@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="div-canvas_par"></div>
+
+<script src="./../public/js/three.js"></script>
+<script src="./../public/js/OBJLoader.js"></script>
+<script>
+    
+    class FnHover {
+
+        constructor(eDivCanvasPar) {
+
+            this.eDivCanvasPar = eDivCanvasPar;
+
+            this.scene = Object;
+            this.camera = Object;
+            this.renderer = Object;
+            this.light = Object;
+            this.mesh = Object;
+            this.group=Object;
+
+            this.fnInit();
+
+        }
+
+        fnInit() {
+
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnSetMesh();
+            this.fnSetGridHelper();
+
+        }
+
+        fnSetScene() {
+
+            this.scene = new THREE.Scene();
+
+        }
+
+        fnSetCamera() {
+
+            this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 10000);
+
+            this.camera.position.x = 120;
+            this.camera.position.y = 80;
+            this.camera.position.z = 100;
+
+            this.camera.up.x = 0;
+            this.camera.up.y = 1;
+            this.camera.up.z = 0;
+
+            this.camera.lookAt({
+                x: 0,
+                y: 0,
+                z: 0
+            });
+
+            this.scene.add(this.camera);
+
+        }
+
+        fnSetRenderer() {
+
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: false//平滑锯齿感(性能不好)
+            });
+            this.renderer.setClearColor(0xffffff);
+            this.renderer.setSize(innerWidth, innerHeight);
+
+            this.eDivCanvasPar.appendChild(this.renderer.domElement);
+
+        }
+
+        fnSetLight() {
+
+            this.light = new THREE.DirectionalLight(0xffffff);
+            this.light.position.set(100,90,80);
+            this.scene.add(this.light);
+
+        }
+
+        fnSetMesh() {
+
+            const boxGeometry=new THREE.BoxGeometry(30,30,30);
+
+            const meshLambertMaterial=new THREE.MeshLambertMaterial({color:0x0000ff});
+
+            this.mesh=new THREE.Mesh(boxGeometry,meshLambertMaterial);
+
+            this.scene.add(this.mesh);
+
+        }
+
+        fnSetGridHelper(){
+
+            const gridHelper=new THREE.GridHelper(1000,50,0x0000ff,0x00ffff);
+            this.scene.add(gridHelper);
+
+        }
+
+        fnRender() {
+
+            const This=this;
+
+            function animation() {
+
+                const v3=new THREE.Vector3(0,1,1);
+
+                This.mesh.rotateOnAxis(v3,0.01);
+
+                This.renderer.render(This.scene, This.camera);
+
+                requestAnimationFrame(animation);
+
+            }
+
+            animation();
+
+        }
+
+    }
+
+    const oop3D = new FnHover(document.querySelector("#div-canvas_par"));
+    oop3D.fnRender();
+
+</script>
+</body>
+</html>

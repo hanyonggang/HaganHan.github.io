@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>人物粒子系统</title>
+</head>
+<body>
+
+<div id="div-canvas_par"></div>
+
+<script src="./../public/js/three.js"></script>
+<script src="./../public/js/OBJLoader.js"></script>
+<script src="./../public/js/JSONLoader.js"></script>
+<script src="./../public/js/BinaryLoader.js"></script>
+<script>
+
+    class FnHover {
+
+        constructor(eDivCanvasPar) {
+
+            this.eDivCanvasPar = eDivCanvasPar;
+
+            this.scene = Object;
+            this.camera = Object;
+            this.renderer = Object;
+            this.light = Object;
+            this.mesh = Object;
+            this.objMesh = Object;
+            this.group = Object;
+            this.groupsSettings=[];
+
+            this.fnInit();
+
+        }
+
+        fnInit() {
+
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnCreateGroup();
+            this.fnSetMesh();
+
+        }
+
+        fnSetScene() {
+
+            this.scene = new THREE.Scene();
+            this.scene.fog = new THREE.FogExp2(0x000104, 0.0000675);
+
+        }
+
+        fnSetCamera() {
+
+            this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 10000);
+
+            this.camera.position.x = 3000;
+            this.camera.position.y = 1000;
+            this.camera.position.z = 5000;
+
+            this.camera.up.x = 0;
+            this.camera.up.y = 1;
+            this.camera.up.z = 0;
+
+            this.camera.lookAt({
+                x: 0,
+                y: 0,
+                z: 0
+            });
+
+            this.scene.add(this.camera);
+
+        }
+
+        fnSetRenderer() {
+
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: false//平滑锯齿感(性能不好)
+            });
+            this.renderer.setClearColor(this.scene.fog.color);
+            this.renderer.setSize(innerWidth, innerHeight);
+
+            this.eDivCanvasPar.appendChild(this.renderer.domElement);
+
+        }
+
+        fnSetLight() {
+
+            this.light = new THREE.DirectionalLight(0xffffff);
+            this.light.position.set(100, 90, 80);
+            this.scene.add(this.light);
+
+        }
+
+        fnCreateGroup() {
+
+            this.group = new THREE.Group();
+
+        }
+
+        fnSetMesh() {
+
+            const This = this;
+
+            const loadingManager = new THREE.LoadingManager(function () {
+
+                This.fnRender();
+            });
+
+            const jsonLoader = new THREE.JSONLoader(loadingManager);
+            const binaryLoader = new THREE.BinaryLoader(loadingManager);
+
+            //加载地形terrain
+            jsonLoader.load("./obj/terrain.js", function (geometryTerrain) {
+
+//                const meshLambertMaterialTerrain=new THREE.MeshLambertMaterial({color:0xff0000});
+//                const meshTerrain=new THREE.Mesh(geometryTerrain,meshLambertMaterialTerrain);
+//                This.scene.add(meshTerrain);
+
+            });
+
+            //加载车car
+            binaryLoader.load("./obj/veyron/VeyronNoUv_bin.js", function (geometryCar) {
+
+//                const meshLambertMaterialCar=new THREE.MeshLambertMaterial({color:0xff0000});
+//                const meshTerrain=new THREE.Mesh(geometryCar,meshLambertMaterialCar);
+//                This.scene.add(meshTerrain);
+                This.fnCreateMesh(geometryCar, This.scene, 6.8, 200, -200, 100, 0xffff00, false);
+
+            });
+
+            //加载女人female
+            binaryLoader.load("./obj/female02/Female02_bin.js", function (geometryFemale) {
+
+//                const pointsFemale=new THREE.Points(geometryFemale,new THREE.PointsMaterial({
+//                    size:1,
+//                    color:0xffff00
+//                }));
+//                pointsFemale.position.x+=80;
+//                This.scene.add(pointsFemale)
+                This.fnCreateMesh(geometryFemale,This.scene,4.05,-500,-350,600,0xff7744,true);
+                This.fnCreateMesh(geometryFemale,This.scene,4.05,-900,-350,-2800,0x78ff01,true);
+                This.fnCreateMesh(geometryFemale,This.scene,4.05,2000,-350,-100,0xc0f489,true);
+
+            });
+
+            //加载男人male
+            binaryLoader.load("./obj/male02/Male02_bin.js", function (geometryMale) {
+
+//                const meshLambertMaterialMale=new THREE.MeshLambertMaterial({color:0xff0000});
+//                const meshTerrain=new THREE.Mesh(geometryMale,meshLambertMaterialMale);
+//                This.scene.add(meshTerrain);
+                This.fnCreateMesh(geometryMale,This.scene,4.05,1200,-350,100,0x0f5387,true);
+                This.fnCreateMesh(geometryMale,This.scene,4.05,1200,-350,1400,0xff00ff,true);
+                This.fnCreateMesh(geometryMale,This.scene,4.05,-740,-350,100,0xff0f5f,true);
+
+            });
+
+            //粒子网格
+            const object3D = new THREE.Object3D();
+            const points = new THREE.Points(new THREE.PlaneBufferGeometry(15000, 15000, 64, 64), new THREE.PointsMaterial({
+                size: 10,
+                color: 0xff0000
+            }));
+            object3D.add(points);
+            object3D.rotation.x = -Math.PI / 2;
+
+            const group=new THREE.Group();
+            group.add(object3D);
+            group.position.y=-360;
+            This.group.add(group);
+
+        }
+
+        fnCreateMesh(originalGeometry, scene, scale, x, y, z, color, dynamic) {
+
+            //获取顶点的位置
+            const vertices = originalGeometry.vertices;
+            const verticesLength = vertices.length;
+
+            //几何体对象和相关属性
+            const geometry = new THREE.Geometry();
+            const verticesTmp = [];//x,y,z,down,up
+
+            for (let i = 0; i < verticesLength; i++) {
+
+                const point = vertices[i];
+                geometry.vertices[i] = point.clone();
+
+                verticesTmp[i] = [point.x, point.y, point.z, 0, 0];
+
+            }
+
+            //人的位置
+            const clones = [
+                [1000, 0, 1500],
+                [2000, 0, -1000],
+                [-1500, 0, 1500],
+                [1000, 0, -3000],
+                [-3000, 0, 1000],
+                [-2000, 0, -2000],
+                [-3000, 0, -2000],
+                [0, 0, 0]
+            ];
+
+            const clonemeshes=[];
+
+            //模型上到下, 或者下到上, 静态物体, 动态物体, 生成粒子系统points
+            if (dynamic === true) {//如果是动态的物体
+
+                for(let i=0;i<clones.length;i++){
+
+                    const newColor=(i<clones.length-1)?0x777777:color;
+
+                    const points = new THREE.Points(geometry, new THREE.PointsMaterial({
+                        size: 1,
+                        color:newColor
+                    }));
+                    this.points=points;
+
+                    points.scale.x = points.scale.y = points.scale.z = scale;
+                    points.position.x = x+clones[i][0];
+                    points.position.y = y+clones[i][1];
+                    points.position.z = z+clones[i][2];
+
+                    this.group.add(points);
+
+                    //将所有的对象管理起来, 放到数组里面
+                    clonemeshes.push({
+                        group:points,
+                        speed:0.5+Math.random()
+                    });
+
+                }
+
+            } else {
+
+                const points = new THREE.Points(geometry, new THREE.PointsMaterial({
+                    size: 1,
+                    color
+                }));
+
+                points.scale.x = points.scale.y = points.scale.z = scale;
+                points.position.x = x;
+                points.position.y = y;
+                points.position.z = z;
+
+                this.group.add(points);
+
+            }
+
+            //设置一些初始化的参数, 方向
+            this.groupsSettings.push({
+                points:this.points,
+                vertices:geometry.vertices,
+                verticesTmp,
+                verticesLength,
+                down:0,
+                up:0,
+                speed:150,
+                delay:Math.floor(200+700*Math.random()),
+                started:false,
+                start:Math.floor(100+700*Math.random()),
+                dynamic:dynamic,
+                direction:0
+            });
+
+            //加入场景
+            this.scene.add(this.group);
+
+
+        }
+
+        fnRender() {
+
+            const This = this;
+            const clock=new THREE.Clock();
+
+            function animation() {
+
+                //计算每一帧的时间
+                let delta=clock.getDelta();
+                delta= delta<2?delta:2;
+
+                This.group.rotation.y+=-0.1*delta;
+
+                //根据动态或者静态模型调整每个模型的顶点参数
+                for(let i=0;i<This.groupsSettings.length;i++){
+
+                    if(This.groupsSettings[i].dynamic!==true){//不是动态物体
+
+                        continue;
+
+                    }
+
+                    //最开始的时候没有移动, 设置向下移动
+                    if(This.groupsSettings[i].start>0){//如果等待时间>0,那么继续等待
+
+                        This.groupsSettings[i].start-=1;
+
+                    }else {//如果等待时间<=0,那么开始动画
+
+                        if(!This.groupsSettings[i].started){//如果还没开始
+
+                            This.groupsSettings[i].direction=-1;//改变方向
+                            This.groupsSettings[i].start=Math.floor(100+700*Math.random());
+                            This.groupsSettings[i].started=true;//设置started为开始
+
+                        }
+
+                    }
+
+                    for(let j=0;j<This.groupsSettings[i].verticesLength;j++){
+
+                        const p=This.groupsSettings[i].vertices[j];
+                        const vt=This.groupsSettings[i].verticesTmp[j];
+
+                        if(This.groupsSettings[i].direction<0){
+
+                            if(p.y>0){
+
+                                p.x+=1.5*(0.5-Math.random())*This.groupsSettings[i].speed*delta;
+                                p.y+=3*(0.25-Math.random())*This.groupsSettings[i].speed*delta;//总体向下
+                                p.z+=1.5*(0.5-Math.random())*This.groupsSettings[i].speed*delta;
+
+                            }else {
+                                if(!vt[3]){//0表示向下
+                                    vt[3]=1;
+                                    This.groupsSettings[i].down+=1;
+                                }
+                            }
+
+                        }
+                        if(This.groupsSettings[i].direction>0){
+
+                            const d=Math.abs(p.x-vt[0])+Math.abs(p.y-vt[1])+Math.abs(p.z-vt[2]);//点当前所在的距离到目标点的距离
+
+                            if( d>1 ){//点当前所在的距离还没到目标
+
+                                p.x+=-(p.x-vt[0])/d*This.groupsSettings[i].speed*delta*(0.85-Math.random());
+                                p.y+=-(p.y-vt[1])/d*This.groupsSettings[i].speed*delta*(1+Math.random());
+                                p.z+=-(p.z-vt[2])/d*This.groupsSettings[i].speed*delta*(0.85-Math.random());
+
+                            }else {//已经到达目标
+
+                                if(!vt[4]){
+                                    vt[4]=1;
+                                    This.groupsSettings[i].up+=1;
+                                }
+
+                            }
+
+                        }
+
+                        //向上
+                        if(This.groupsSettings[i].down===This.groupsSettings[i].verticesLength){
+
+                            //当全部下来之后, 休息一会再上去
+
+                            if(This.groupsSettings[i].delay===0){//休息结束
+
+                                This.groupsSettings[i].direction=1;//方向为上
+//                                This.groupsSettings[i].speed=10;
+                                This.groupsSettings[i].down=0;
+                                This.groupsSettings[i].delay=Math.floor(200+700*Math.random());
+
+                                for(let j=0;j<This.groupsSettings[i].verticesLength;j++){
+
+                                    This.groupsSettings[i].verticesTmp[j][3]=0;
+
+                                }
+
+                            }else {
+
+                                This.groupsSettings[i].delay-=1;
+
+                            }
+
+                        }
+                        if(This.groupsSettings[i].up===This.groupsSettings[i].verticesLength){
+
+                            //当全部下来之后, 休息一会再上去
+
+                            if(This.groupsSettings[i].delay===0){//休息结束
+
+                                This.groupsSettings[i].direction=-1;//方向为上
+//                                This.groupsSettings[i].speed=10;
+                                This.groupsSettings[i].up=0;
+                                This.groupsSettings[i].delay=Math.floor(200+700*Math.random());
+
+                                for(let j=0;j<This.groupsSettings[i].verticesLength;j++){
+
+                                    This.groupsSettings[i].verticesTmp[j][4]=0;
+
+                                }
+
+                            }else {
+
+                                This.groupsSettings[i].delay-=1;
+
+                            }
+
+                        }
+
+
+                    }
+                    This.groupsSettings[i].points.geometry.verticesNeedUpdate=true;
+
+                    //首先需要设置粒子是向上还是向下运动
+
+                    //如果向下移动完成, 那么休息一会, 再向上移动
+
+                    //如果向上移动完成, 那么休息一会, 再向下移动
+
+                }
+
+                This.renderer.clear();
+                This.renderer.render(This.scene, This.camera);
+
+                requestAnimationFrame(animation);
+
+            }
+
+//            setTimeout(function () {
+//                animation();
+//            },2000);
+
+            animation();
+
+        }
+
+    }
+
+    const oop3D = new FnHover(document.querySelector("#div-canvas_par"));
+
+</script>
+</body>
+</html>

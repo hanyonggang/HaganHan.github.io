@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="easelJS.0.8.2.js"></script>
+    <script>
+        window.onload= function () {
+            var stage=new createjs.Stage("canvas");
+            var circle=new createjs.Shape();
+            circle.graphics.beginFill("#ff0000").drawCircle(0,0,20);
+            stage.addChild(circle);
+            createjs.Tween.get(circle)
+                    .to({"x":800,"y":300},1000,createjs.Ease.quintInOut)
+                    .to({"x":50,"y":400},1000,createjs.Ease.elasticInOut)
+                    .to({"x":500,"y":200},1000,createjs.Ease.quartInOut)
+                    .to({"x":100,"y":200},1000,createjs.Ease.bounceInOut)
+                    .to({"x":100,"y":50},1000,createjs.Ease.sineOut);
+            createjs.Ticker.setFPS(30);
+            createjs.Ticker.addEventListener("tick",stage);
+        };
+    </script>
+</head>
+<body>
+    <canvas id="canvas" width="1000" height="450"></canvas>
+</body>
+</html>

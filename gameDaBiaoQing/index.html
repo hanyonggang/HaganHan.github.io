@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        p {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #eee;
+        }
+        #btn {
+            padding: 0;
+            width: 100px;
+            margin-top: 10px;
+            margin-left: 620px;
+        }
+        #div {
+            background-color: #fff;
+            width: 700px;
+            height: 400px;
+            margin: 10px auto;
+            border: 1px solid #000;
+            position: relative;
+        }
+        @media (max-width: 400px) {
+            #div {
+                background-color: #fff;
+                width: 300px;
+                height: 300px;
+                margin: 10px auto;
+                border: 1px solid #000;
+                position: relative;
+            }
+            #btn {
+                padding: 0;
+                width: 80px;
+                height: 24px;
+                margin-top: 10px;
+                margin-left: 120px;
+            }
+        }
+        img {
+            position: absolute;
+        }
+        h5 {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script>
+        var s=1;
+        var yes=0;
+        var no=0;
+        var br=0;
+        var divWidth;
+        var divHeight;
+        window.onload= function () {
+            var btnMl=window.innerWidth/2-50;
+            var oBtn=document.getElementById("btn");
+            var oDiv=document.getElementById("div");
+            var oH5No=document.getElementsByTagName("h5")[0];
+            var oH5Yes=document.getElementsByTagName("h5")[1];
+            var arr=[
+                    "1.png",
+                    "2.png",
+                    "3.png",
+                    "4.png",
+                    "5.png",
+                    "6.png",
+                    "7.png",
+                    "8.png",
+                    "9.png",
+                    "10.png",
+                    "11.png",
+                    "qq.png"
+            ];
+            divWidth=oDiv.offsetWidth;
+            divHeight=oDiv.offsetHeight;
+            oBtn.onclick= function () {
+                yes=0;
+                no=0;
+                s=1;
+                br=0;
+                clearInterval(oH5No.timer);
+                oH5No.timer=setInterval(function () {
+                    oH5No.innerHTML="失败："+no;
+                    oH5Yes.innerHTML="成功："+yes;
+                },100);
+                zx();
+                function zx() {
+                    if(no<9){
+                        move(oDiv,arr, function () {
+                            zx();
+                        })
+                    }else{
+                        br=1;
+                    }
+                }
+            };
+        };
+        function move(oDiv,arr,fn) {
+            var imgLeft=Math.round(Math.random()*(divWidth-24));
+            var imgNum=Math.round(Math.random()*11);
+            oDiv.innerHTML="<img src="+arr[imgNum]+">";
+            var oImg=document.getElementsByTagName("img")[0];
+            oImg.onmousedown= function () {
+                clearInterval(oImg.timer);
+                oImgMove(oImg);
+                setTimeout(function () {
+                    fn()
+                },500);
+                yes++;
+            };
+            oImg.style.left=imgLeft+"px";
+            clearInterval(oImg.timer);
+            oImg.timer=setInterval(function () {
+                var m=oImg.offsetTop+s;
+                if(m>=divHeight-24){
+                    oImg.style.top = divHeight-24+"px";
+                    clearInterval(oImg.timer);
+                    divMove(oDiv);
+                    fn();
+                    no++;
+                    if(br==1){
+                        setTimeout(function () {
+                            alert("游戏结束，成功："+yes+"；失败：10");
+                        },400)
+                    }
+                }else {
+                    oImg.style.top = m + "px";
+                }
+            },50);
+            s++;
+
+        }
+        function divMove(oDiv) {
+            var divM=["20px auto","0px auto","18px auto","2px auto","16px auto","4px auto","14px auto","6px auto","12px auto","8px auto","10px auto"];
+            var m=0;
+            clearInterval(oDiv.timer2);
+            oDiv.timer2=setInterval(function () {
+                if(m<=divM.length){
+                    oDiv.style.margin=divM[m];
+                    m++;
+                }
+            },30);
+        }
+        function oImgMove(oImg) {
+            var imgO=oImg.offsetLeft;
+            var imgM=[imgO-10,imgO+10,imgO-8,imgO+8,imgO-6,imgO+6,imgO-4,imgO+4,imgO-2,imgO+2,imgO];
+            var mm=0;
+            clearInterval(oImg.timer2);
+            oImg.timer2=setInterval(function () {
+                if(mm<=imgM.length){
+                    oImg.style.left=imgM[mm]+"px";
+                    mm++;
+                }
+            },30);
+        }
+    </script>
+</head>
+<body>
+    <p>游戏说明：点击“开始游戏”，随机掉下QQ表情，点中它，千万别让它掉下去！！</p>
+    <button id="btn">开始游戏</button>
+    <h5>失败：</h5>
+    <h5>成功：</h5>
+    <div id="div"></div>
+</body>
+</html>

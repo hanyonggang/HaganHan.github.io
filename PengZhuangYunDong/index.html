@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #div1{
+            width: 100px;
+            height: 100px;
+            background-color: #555;
+            position: absolute;
+            cursor: pointer;
+        }
+        #btn1{
+            position: absolute;
+            top: 200px;
+            width: 100px;
+            height: 30px;
+            cursor: pointer;
+        }
+        #div2{
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            background-color: crimson;
+            top: 0;
+            left: 200px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+    </style>
+    <script src="function.js"></script>
+    <script>
+        function getStyle(obj,style) {
+            if(obj.currentStyle){
+                return obj.currentStyle[style];
+            }else{
+                return getComputedStyle(obj,false)[style];
+            }
+        }
+        //拖拽运动      startDragMove(obj,'bottom')      //如果没有Collision参数则只是普通的拖拽运动
+        //如果有Collision参数，则以参数方向为重力方向进行碰撞运动
+        function startDragMove(obj,Collision) {
+            var disX=null;
+            var disY=null;
+            var lastX=0;
+            var lastY=0;
+            obj.onmousedown= function (ev) {
+                var event=ev||event;
+                var iSpeedX=0;
+                var iSpeedY=0;
+                disX=event.clientX-obj.offsetLeft;
+                disY=event.clientY-obj.offsetTop;
+                clearInterval(obj.timer);
+                document.onmousemove= function (ev) {
+                    var event=ev||event;
+                    var scrollLeft=document.documentElement.scrollLeft||document.body.scrollLeft;
+                    var scrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+                    var l=scrollLeft+event.clientX-disX;
+                    var t=scrollTop+event.clientY-disY;
+                    if(l<0){
+                        l=0;
+                    }else if(l>document.documentElement.clientWidth-parseInt(getStyle(obj,'width'))){
+                        l=document.documentElement.clientWidth-parseInt(getStyle(obj,'width'));
+                    }
+                    if(t<0){
+                        t=0;
+                    }else if(t>document.documentElement.clientHeight-parseInt(getStyle(obj,'height'))){
+                        t=document.documentElement.clientHeight-parseInt(getStyle(obj,'height'));
+                    }
+                    obj.style['left']=l+'px';
+                    obj.style['top']=t+'px';
+                    iSpeedX=(l-lastX)*2;
+                    iSpeedY=(t-lastY)*2;
+                    lastX=l;
+                    lastY=t;
+                    document.title='X:'+iSpeedX+'Y'+iSpeedY;
+                };
+                document.onmouseup= function () {
+                    document.onmousemove=null;
+                    document.onmouseup=null;
+                    if(Collision){
+                        if(Collision=='top'){
+                            startCollisionMove(obj,iSpeedX,iSpeedY,'top');
+                        }else if(Collision=='bottom'){
+                            startCollisionMove(obj,iSpeedX,iSpeedY,'bottom');
+                        }else if(Collision=='left'){
+                            startCollisionMove(obj,iSpeedX,iSpeedY,'left');
+                        }else if(Collision=='right'){
+                            startCollisionMove(obj,iSpeedX,iSpeedY,'right');
+                        }
+                    }else{
+                        startCollisionMove(obj,iSpeedX,iSpeedY);
+                    }
+                };
+		return false;
+            };
+        }
+        //碰撞运动      startCollisionMove(obj,10,10,'bottom')
+        //当有重力方向时obj会以给定速度向重力方向碰撞运动最终停在碰撞方向上     如果没有重力方向，obj会以给定速度碰撞运动，终点不确定
+        function startCollisionMove(obj,ispeedx,ispeedy,direction) {
+            var iSpeedX=ispeedx;
+            var iSpeedY=ispeedy;
+            clearInterval(obj.timer);
+            obj.timer=setInterval(function () {
+                if(direction){
+                    if(direction=='top'){
+                        iSpeedY-=3;
+                    }else if(direction=='bottom'){
+                        iSpeedY+=3;
+                    }else if(direction=='left'){
+                        iSpeedX-=3;
+                    }else if(direction=='right'){
+                        iSpeedX+=3;
+                    }
+                }else{
+                    iSpeedX*=0.99;
+                    iSpeedY*=0.99;
+                }
+                var l=obj.offsetLeft+iSpeedX;
+                var t=obj.offsetTop+iSpeedY;
+                if(t>document.documentElement.clientHeight-parseInt(getStyle(obj,'height'))){
+                    iSpeedY*=-0.8;
+                    iSpeedX*=0.8;
+                    t=document.documentElement.clientHeight-parseInt(getStyle(obj,'height'));
+                }else if(t<0){
+                    iSpeedY*=-0.8;
+                    iSpeedX*=0.8;
+                    t=0;
+                }
+                if(l>document.documentElement.clientWidth-parseInt(getStyle(obj,'width'))){
+                    iSpeedX*=-0.8;
+                    iSpeedY*=0.8;
+                    l=document.documentElement.clientWidth-parseInt(getStyle(obj,'width'));
+                }else if(l<0){
+                    iSpeedX*=-0.8;
+                    iSpeedY*=0.8;
+                    l=0;
+                }
+                if(Math.abs(iSpeedX)<1){
+                    iSpeedX=0;
+                }
+                if(Math.abs(iSpeedY)<1){
+                    iSpeedY=0;
+                }
+                if(direction){
+                    if(direction=='bottom'){
+                        if(iSpeedX==0&&iSpeedY==0&&t==document.documentElement.clientHeight-parseInt(getStyle(obj,'height'))){
+                            clearInterval(obj.timer);
+                        }
+                    }else if(direction=='top'){
+                        if(iSpeedX==0&&iSpeedY==0&&t==0){
+                            clearInterval(obj.timer);
+                        }
+                    }else if(direction=='right'){
+                        if(iSpeedX==0&&iSpeedY==0&&l==document.documentElement.clientWidth-parseInt(getStyle(obj,'width'))){
+                            clearInterval(obj.timer);
+                        }
+                    }else if(direction=='left'){
+                        if(iSpeedX==0&&iSpeedY==0&&l==0){
+                            clearInterval(obj.timer);
+                        }
+                    }
+                }else{
+                    if(iSpeedX==0&&iSpeedY==0){
+                        clearInterval(obj.timer);
+                    }
+                }
+                obj.style['left']=l+'px';
+                obj.style['top']=t+'px';
+            },30)
+        }
+        window.onload= function () {
+            var oDiv1=document.getElementById('div1');
+            var oBtn1=document.getElementById('btn1');
+            var oDiv2=document.getElementById('div2');
+            startDragMove(oDiv1,'bottom');
+            startDragMove(oBtn1,'bottom');
+            startDragMove(oDiv2,'bottom')
+        };
+    </script>
+</head>
+<body>
+    <div id="div1"></div>
+    <input id="btn1" type="button" value="点我拖拽">
+    <div id="div2"></div>
+</body>
+</html>

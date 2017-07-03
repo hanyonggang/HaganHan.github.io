@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        window.onload= function () {
+            var oBtn=document.getElementById('btn1');
+            var oTxt=document.getElementById('txt1');
+            var oTab=document.getElementById('tab1');
+            oBtn.onclick= function () {
+                oTxtArrt=oTxt.value.split(' ');
+                for(var i=0;i<oTab.tBodies[0].rows.length;i++){
+                    var oFound=false;
+                    var thisName=oTab.tBodies[0].rows[i].cells[1].innerHTML;
+                    for(var j=0;j<oTxtArrt.length;j++){
+                        if(thisName.search(oTxtArrt[j])!=-1&&oTxtArrt[j]!=''){
+                            oFound=true;
+                        }
+                    }
+                    if(oFound){
+                        oTab.tBodies[0].rows[i].style['backgroundColor']='#333'
+                    }else{
+
+                        oTab.tBodies[0].rows[i].style['backgroundColor']=''
+                    }
+                }
+            };
+        };
+    </script>
+</head>
+<body>
+    <form action="">
+        <input type="text" id="txt1"/>
+        <input type="button" value="搜索" id="btn1"/>
+    </form>
+    <table id="tab1" border="1px" width="300px" style="text-align: center;line-height: 28px">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>姓名</th>
+                <th>性别</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>韩永刚</td>
+                <td>男</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>李雪梅</td>
+                <td>女</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>邹江龙</td>
+                <td>男</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>韩莹</td>
+                <td>女</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

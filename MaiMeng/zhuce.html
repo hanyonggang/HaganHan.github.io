@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <style type="text/css">
+        h5{
+            margin: 0;
+            padding: 0;
+            color: #333;
+            font-size: 20px;
+        }
+        form{
+            margin-top: 100px;
+            margin-left: 500px;
+        }
+        .i1,.i2{
+            width: 300px;
+            height: 30px;
+            font-size: 15px;
+        }
+        .tj{
+            width: 100px;
+            height: 30px;
+            color: #444;
+            margin-left: 100px;
+            margin-top: 10px;
+            font-size: 17px;
+            background-color: #ddd;
+            font-family: fantasy;
+        }
+        p{
+            color: #333;
+            line-height: 30px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <h5>请输入制作者姓名：</h5>
+        <input type="text" placeholder="他的姓名" class="i1">
+        <br/>
+        <br/>
+        <h5>请输入制作者生日：</h5>
+        <input type="password" placeholder="他的生日" class="i2">
+        <br/>
+        <br/>
+        <a><input type="button" value="确认" class="tj"></a>
+        <p></p>
+    </form>
+    <script>
+        function aa(){
+            document.getElementsByTagName('input')[2].addEventListener('click',function(){
+                if(document.getElementsByTagName('input')[0].value=='韩永刚'&&document.getElementsByTagName('input')[1].value=='19940919'){
+                    document.getElementsByTagName('a')[0].setAttribute('href','zhecechenggong.html')
+                }else if(document.getElementsByTagName('input')[0].value==''&&document.getElementsByTagName('input')[1].value==''){
+                    alert('请输入信息')
+                }else if(document.getElementsByTagName('input')[0].value=='韩永刚'&&document.getElementsByTagName('input')[1].value=='1994919'){
+                    document.getElementsByTagName('p')[0].innerHTML='真感动你知道我生日！可是正确格式是19940919。。。'
+                }else if(document.getElementsByTagName('input')[0].value!=='韩永刚'&&document.getElementsByTagName('input')[1].value=='1994919'){
+                    document.getElementsByTagName('p')[0].innerHTML='你不知道我是谁你是怎么知道我生日的！<br/>还有！生日正确格式应该是19940919'
+                }else if(document.getElementsByTagName('input')[0].value!=='韩永刚'&&document.getElementsByTagName('input')[1].value=='19940919'){
+                    document.getElementsByTagName('p')[0].innerHTML='谁做的都不知道！是不是傻！'
+                }else if(document.getElementsByTagName('input')[0].value=='韩永刚'&&document.getElementsByTagName('input')[1].value!=='19940919'){
+                    document.getElementsByTagName('p')[0].innerHTML='呜呜呜！我生日你都不知道！好伤心'
+                }else if(document.getElementsByTagName('input')[0].value!=='韩永刚'&&document.getElementsByTagName('input')[1].value!=='19940919'){
+                    document.getElementsByTagName('p')[0].innerHTML='请输入正确信息，否则无法进入到下一个语句！'
+                }
+            })
+        }
+        aa()
+    </script>
+</body>
+</html>

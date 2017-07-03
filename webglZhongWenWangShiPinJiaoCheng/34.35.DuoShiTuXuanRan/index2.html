@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        .stats {
+            position: absolute;
+            left: 10px;
+            bottom:10px;
+        }
+        .g-article {
+            position: relative;
+        }
+        .g-article>section {
+            position: absolute;
+            width: 1000px;
+            height:500px;
+            left: 10px;
+            top:10px;
+            border: 1px solid;
+        }
+        canvas {
+            position: absolute;
+            left: 0;
+            top:0;
+        }
+        .u-p {
+            position: absolute;
+            left: 10px;
+            bottom: 0;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<article class="g-article">
+    <section id="section-one" class="m-one">
+    </section>
+    <section id="section-two" class="m-two">
+    </section>
+    <section id="section-three" class="m-three">
+    </section>
+    <section id="section-four" class="m-four">
+        <p class="u-p">4个视图叠加</p>
+    </section>
+</article>
+
+<script src="./../public/js/three.js"></script>
+<script src="./../public/js/stats.js"></script>
+<script>
+
+    class Fn3DMax {
+
+        constructor(eSection,scene,cameraX,cameraY,cameraZ,upX,upY,upZ) {
+
+            this.eSection = eSection;
+
+            this.scene = scene;
+            this.camera = Object;
+            this.renderer = Object;
+            this.light = Object;
+            this.mesh = Object;
+            this.stats = Object;
+
+            this.cameraX=cameraX;
+            this.cameraY=cameraY;
+            this.cameraZ=cameraZ;
+            this.upX=upX;
+            this.upY=upY;
+            this.upZ=upZ;
+
+            this.fnInit();
+
+        }
+
+        fnInit() {
+
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnSetMesh();
+            this.fnSetStats();
+            this.fnOnReSize();
+            this.fnRender();
+
+        }
+
+        fnSetCamera() {
+
+            this.camera = new THREE.PerspectiveCamera(45, this.eSection.offsetWidth / this.eSection.offsetHeight, 1, 10000);
+
+            this.camera.position.x = this.cameraX;
+            this.camera.position.y = this.cameraY;
+            this.camera.position.z = this.cameraZ;
+
+            this.camera.up.x = this.upX;
+            this.camera.up.y = this.upY;
+            this.camera.up.z = this.upZ;
+
+            this.camera.lookAt({
+                x: 0,
+                y: 0,
+                z: 0
+            });
+
+            this.scene.add(this.camera);
+
+        }
+
+        fnSetRenderer(){
+
+            this.renderer=new THREE.WebGLRenderer({alpha:true});
+            this.renderer.setSize(this.eSection.offsetWidth,this.eSection.offsetHeight);
+            const element=this.renderer.domElement;
+            document.querySelector("#section-one").appendChild(element);
+
+        }
+
+        fnSetLight() {
+
+            this.light = new THREE.DirectionalLight(0xffffff);
+            this.light.position.set(0,0,80);
+            this.light2=new THREE.AmbientLight(0x222222);
+
+            this.scene.add(this.light);
+            this.scene.add(this.light2);
+
+        }
+
+        fnSetMesh() {
+
+            const cubeGeometry=new THREE.CubeGeometry(20,30,40);
+            const meshLambertMaterial=new THREE.MeshLambertMaterial({color:0xf00f0f});
+            this.mesh=new THREE.Mesh(cubeGeometry,meshLambertMaterial);
+            this.mesh.position.set(0, 0, 0);
+
+            this.scene.add(this.mesh);
+
+        }
+
+        fnSetStats() {
+
+            this.stats = new Stats();
+            this.stats.domElement.className = "stats";
+            this.stats.domElement.style.left=this.eSection.offsetLeft+"px";
+            this.stats.domElement.style.top=this.eSection.offsetTop+"px";
+            document.body.appendChild(this.stats.domElement)
+
+        }
+
+        fnOnReSize(){
+
+            const This=this;
+            window.onresize=function () {
+                This.camera.aspect=This.eSection.offsetWidth/This.eSection.offsetHeight;
+                This.camera.updateProjectionMatrix();
+
+                This.renderer.setSize(This.eSection.offsetWidth,This.eSection.offsetHeight);
+            }
+
+        }
+
+        fnRender() {
+
+            const This = this;
+
+            function animation() {
+
+                This.stats.begin();
+
+                This.mesh.rotation.x+=0.009;
+                This.mesh.rotation.y+=0.007;
+
+                This.renderer.render(This.scene, This.camera);
+
+                requestAnimationFrame(animation);
+
+                This.stats.end();
+
+            }
+
+            animation();
+
+        }
+
+    }
+
+    const eSectionOne=document.querySelector("#section-one");
+    const eSectionTwo=document.querySelector("#section-two");
+    const eSectionThree=document.querySelector("#section-three");
+    const eSectionFour=document.querySelector("#section-four");
+
+    const scene=new THREE.Scene();
+
+    const oop3DMaxOne = new Fn3DMax(eSectionOne,scene,0,0,100,0,1,0);
+    const oop3DMaxTwo = new Fn3DMax(eSectionTwo,scene,0,100,0,0,0,1);
+    const oop3DMaxThree = new Fn3DMax(eSectionThree,scene,-100,0,0,0,1,0);
+    const oop3DMaxFour = new Fn3DMax(eSectionFour,scene,100,100,100,1,1,1);
+
+</script>
+</body>
+</html>

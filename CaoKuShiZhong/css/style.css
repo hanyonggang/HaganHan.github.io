@@ -1,0 +1,17 @@
+#div{
+    width: 520px;
+    height: 520px;
+    margin: 0 auto;
+    background-image: url(../images/bg.png);
+    text-align: center;
+}
+div>img:nth-child(1){
+    margin: 50px auto 0;
+    padding: 110px 0 80px;
+    display: block;
+}
+#div>img:nth-child(2){
+    padding-bottom: 50px;
+}
+#div>img:nth-child(13){
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>环境光</title>
+</head>
+<body>
+<div id="div-canvas_par"></div>
+<script src="./../public/js/three.js"></script>
+<script>
+
+    class Fn3D {
+
+        constructor(eDivCanvasPar){
+
+            this.eDivCanvasPar=eDivCanvasPar;
+
+            this.scene=Object;
+            this.camera=Object;
+            this.renderer=Object;
+            this.mesh=Object;
+
+            this.init();
+
+        }
+
+        init(){
+
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetMesh();
+            this.fnSetRenderer();
+            this.fnSetLight();
+
+        }
+
+        fnSetScene(){
+
+            this.scene=new THREE.Scene();
+
+        }
+
+        fnSetCamera(){
+
+            this.camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,1,1000);
+            this.camera.position.x=100;
+            this.camera.position.y=100;
+            this.camera.position.z=100;
+            this.camera.up.x=0;
+            this.camera.up.y=1;
+            this.camera.up.z=0;
+            this.camera.lookAt({
+                x:0,
+                y:0,
+                z:0
+            });
+            this.scene.add(this.camera);
+
+        }
+
+        fnSetRenderer(){
+
+            this.renderer=new THREE.WebGLRenderer({
+                antialias:true
+            });
+            this.renderer.setSize(innerWidth,innerHeight);
+            this.eDivCanvasPar.appendChild(this.renderer.domElement);
+
+        }
+
+        fnSetMesh(){
+
+            const cubeGeometry=new THREE.CubeGeometry(30,30,30);
+            const meshLambertMaterial=new THREE.MeshLambertMaterial({color:"blue"});
+            this.mesh=new THREE.Mesh(cubeGeometry,meshLambertMaterial);
+            this.scene.add(this.mesh);
+
+        }
+
+        fnSetLight(){
+
+            this.light=new THREE.AmbientLight(0xffffff);
+            this.light.position.x=200;
+            this.light.position.y=200;
+            this.light.position.z=200;
+            this.scene.add(this.light);
+
+        }
+
+        fnRender(){
+
+            this.renderer.setClearColor(0xffffff);
+            this.renderer.clear();
+            this.renderer.render(this.scene,this.camera);
+
+        }
+
+    }
+
+    const oop3D=new Fn3D(document.querySelector("#div-canvas_par"));
+    oop3D.fnRender();
+
+</script>
+</body>
+</html>

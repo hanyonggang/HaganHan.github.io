@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+        }
+        #div img {
+            width: 60px;
+        }
+        #div {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+        }
+    </style>
+    <script src="js/fnOOP.js"></script>
+    <script>
+        window.onload= function () {
+            var oDiv=document.getElementById("div");
+            var aInput=document.getElementsByTagName("input");
+            var aImg=oDiv.getElementsByTagName("img");
+
+            var oApple=new fnApple(aImg);
+            oApple.init({//配置参数
+                "bigImgWidth":128,
+                "dis":300
+            });
+        };
+    </script>
+</head>
+<body>
+    <div id="div">
+        <img src="images/1.png">
+        <img src="images/2.png">
+        <img src="images/3.png">
+        <img src="images/4.png">
+        <img src="images/5.png">
+    </div>
+</body>
+</html>

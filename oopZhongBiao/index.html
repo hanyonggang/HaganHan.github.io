@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #ul {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 100px auto;
+        }
+    </style>
+    <script src="hanQuery2.0.js"></script>
+    <script src="function.js"></script>
+    <script>
+        window.onload= function () {
+            var oDiv=document.getElementById("ul");
+            var oopClock=new FnClock(oDiv);
+            oopClock.init({//配置参数
+
+            });
+        };
+    </script>
+</head>
+<body>
+    <ul id="ul">
+    </ul>
+</body>
+</html>

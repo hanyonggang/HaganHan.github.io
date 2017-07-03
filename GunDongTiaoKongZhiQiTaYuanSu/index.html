@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+        }
+        #div1 {
+            margin:10px 10px;
+            width: 30px;
+            height: 600px;
+            background-color: #ddd;
+            float: right;
+            position: relative;
+        }
+        #div2 {
+            width: 30px;
+            height: 60px;
+            background-color: #999;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        #div3 {
+            width: 100px;
+            height: 30px;
+            background-color: #00f;
+            margin: 20px 20px;
+            position: absolute;
+        }
+    </style>
+    <script src="functions.js"></script>
+    <script>
+        window.onload= function () {
+            var oDiv1=document.getElementById("div1");
+            var oDiv2=document.getElementById("div2");
+            var oDiv3=document.getElementById("div3");
+            oDiv3.start=100;
+            oDiv3.over=1200;
+            oDiv2.addEventListener("mousedown", function (ev) {
+                var ev=ev||event;
+                var mouseY=ev.clientY;
+                var disTop=parseInt(getStyle(oDiv2,"top"));
+                var dis3Width=parseInt(getStyle(oDiv3,"width"));
+                function fn1(ev) {
+                    var ev=ev||event;
+                    var sonTop=parseInt(getStyle(oDiv2,"top"));
+                    var parHeight=parseInt(getStyle(oDiv1,"height"));
+                    var sonHeight=parseInt(getStyle(oDiv2,"height"));
+                    if(sonTop>=0&&sonTop<=parHeight-sonHeight){
+                        var targetTop=mouseY+(ev.clientY-mouseY);
+                        if(targetTop<0){
+                            targetTop=0;
+                        }else if(targetTop>parHeight-sonHeight){
+                            targetTop=parHeight-sonHeight;
+                        }
+                        oDiv2.style.top=targetTop+"px";
+                        oDiv3.style.width=oDiv3.start+(returnBFB(oDiv1,oDiv2,"top")*(oDiv3.over-oDiv3.start))+"px";
+                    }
+                }
+                document.addEventListener("mousemove", fn1,false);
+                document.addEventListener("mouseup", function (ev) {
+                    document.removeEventListener("mousemove",fn1,false);
+                })
+            },false);
+        };
+        function returnBFB(par,son,style){
+            var parHeight=parseInt(getStyle(par,"height"));
+            var parWidth=parseInt(getStyle(par,"width"));
+            var sonHeight=parseInt(getStyle(son,"height"));
+            var sonWidth=parseInt(getStyle(son,"width"));
+            var sonTop=parseInt(getStyle(son,"top"));
+            var sonLeft=parseInt(getStyle(son,"left"));
+            switch (style){
+                case "top":
+                    return parseInt(sonTop/(parHeight-sonHeight)*100)/100;
+                    break;
+                case "left":
+                    return parseInt(sonLeft/(parWidth-sonWidth)*100)/100;
+            }
+        }
+        /*function scrollGDT(par,son){
+            var parHeight=parseInt(getStyle(par,"height"));
+            var parWidth=parseInt(getStyle(par,"width"));
+            var sonHeight=parseInt(getStyle(son,"height"));
+            var sonWidth=parseInt(getStyle(son,"width"));
+            son.onmousedown= function (ev) {
+                var ev=ev||event;
+                var sonTop=son.offsetTop;
+                var mouseY=ev.clientY;
+                document.onmousemove= function (ev) {
+                    var ev=ev||event;
+                    if(son.offsetTop>=0&&son.offsetTop<=parHeight-sonHeight){
+                        var targetTop=sonTop+(ev.clientY-mouseY);
+                        if(targetTop<0){
+                            targetTop=0;
+                        }else if(targetTop>parHeight-sonHeight){
+                            targetTop=parHeight-sonHeight;
+                        }
+                        son.style.top=targetTop+"px";
+                    }
+                };
+                document.onmouseup= function (ev) {
+                    document.onmousemove=null;
+                };
+            };
+
+        }*/
+    </script>
+</head>
+<body>
+    <div id="div1">
+        <div id="div2"></div>
+    </div>
+    <div id="div3"></div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>如何高效渲染点</title>
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        .stats {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="div-canvas_par"></div>
+
+<script src="./../public/js/three.js"></script>
+<script src="./../public/js/stats.js"></script>
+<script>
+
+    class Fn3D {
+
+        constructor(eDivCanvasPar) {
+
+            this.eDivCanvasPar = eDivCanvasPar;
+
+            this.scene = Object;
+            this.camera = Object;
+            this.renderer = Object;
+            this.light = Object;
+            this.mesh = Object;
+            this.stats = Object;
+
+            this.fnInit();
+
+        }
+
+        fnInit() {
+
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnSetMesh();
+            this.fnSetStats();
+            this.fnOnReSize();
+
+        }
+
+        fnSetScene() {
+
+            this.scene = new THREE.Scene();
+            this.scene.fog = new THREE.Fog(0x050505, 2000, 3500);//给场景加雾效
+
+        }
+
+        fnSetCamera() {
+
+            this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 10000);
+
+            this.camera.position.x = 0;
+            this.camera.position.y = 0;
+            this.camera.position.z = 400;
+
+            this.camera.up.x = 0;
+            this.camera.up.y = 1;
+            this.camera.up.z = 0;
+
+            this.camera.lookAt({
+                x: 0,
+                y: 0,
+                z: 0
+            });
+
+            this.scene.add(this.camera);
+
+        }
+
+        fnSetRenderer() {
+
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: false//平滑锯齿感(性能不好)
+            });
+            this.renderer.setClearColor(this.scene.fog.color);
+            this.renderer.setSize(innerWidth, innerHeight);
+
+            this.eDivCanvasPar.appendChild(this.renderer.domElement);
+
+        }
+
+        fnSetLight() {
+
+            this.light = new THREE.DirectionalLight(0xffffff);
+            this.light.position.set(40, 50, 30);
+            this.scene.add(this.light);
+
+        }
+
+        fnSetMesh() {
+
+            const This = this;
+
+            /*start创建点代码*/
+
+            const particles=90000;
+
+            const bufferGeometry=new THREE.BufferGeometry(particles*3);
+            const positions=new Float32Array(particles*3);
+            const colors=new Float32Array(particles*3);
+
+            const color=new THREE.Color();
+
+            const n=800,
+                    n2=n/2;
+
+            for(let i=0;i<positions.length;i+=3){
+
+                //positions
+                const x=Math.random()*n-n2,
+                        y=Math.random()*n-n2,
+                        z=Math.random()*n-n2;
+
+                positions[i]=x;
+                positions[i+1]=y;
+                positions[i+2]=z;
+
+                //colors
+                const vx=(x/n)+0.5,
+                        vy=(y/n)+0.5,
+                        vz=(z/n)+0.5;
+
+                color.setRGB(vx,vy,vz);
+
+                colors[i]=color.r;
+                colors[i+1]=color.g;
+                colors[i+2]=color.b;
+
+            }
+
+            bufferGeometry.addAttribute("position",new THREE.BufferAttribute(positions,3));
+            bufferGeometry.addAttribute("color",new THREE.BufferAttribute(colors,3));
+
+            bufferGeometry.computeBoundingSphere();
+
+            /*end创建点代码*/
+
+            const pointsMaterial=new THREE.PointsMaterial({
+                size:1,
+                vertexColors:THREE.VertexColors
+            });
+
+            this.particleSystem= new THREE.Points(bufferGeometry, pointsMaterial);
+
+            this.scene.add(this.particleSystem);
+
+        }
+
+        fnSetStats() {
+
+            this.stats = new Stats();
+            this.stats.domElement.className = "stats";
+            document.body.appendChild(this.stats.domElement)
+
+        }
+
+        fnOnReSize(){
+
+            const This=this;
+            window.onresize=function () {
+                This.camera.aspect=innerWidth/innerHeight;
+                This.camera.updateProjectionMatrix();
+
+                This.renderer.setSize(innerWidth,innerHeight);
+            }
+
+        }
+
+        fnRender() {
+
+            const This = this;
+
+            function animation() {
+
+                This.stats.begin();
+
+                This.particleSystem.rotation.x+=0.009;
+                This.particleSystem.rotation.y+=0.007;
+
+                This.renderer.render(This.scene, This.camera);
+
+                requestAnimationFrame(animation);
+
+                This.stats.end();
+
+            }
+
+            animation();
+
+        }
+
+    }
+
+    const oop3D = new Fn3D(document.querySelector("#div-canvas_par"));
+    oop3D.fnRender();
+
+</script>
+</body>
+</html>

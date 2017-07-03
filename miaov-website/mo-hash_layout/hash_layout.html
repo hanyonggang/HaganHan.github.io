@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        section {
+            transition: 1s;
+        }
+
+        .show {
+            opacity: 1;
+        }
+        .hide {
+            opacity: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<nav>
+    <button id="btn1" data-hash="index">index-btn</button>
+    <button id="btn3" data-hash="info">info-btn</button>
+    <button id="btn2" data-hash="aside">aside-btn</button>
+</nav>
+
+<section class="hide" data-hash="aside">aside-content</section>
+<section class="hide" data-hash="index">index-content</section>
+<section class="hide" data-hash="info">info-content</section>
+
+<script src="js/hquery-3.1.10.js"></script>
+<script src="js/hash_layout.webpack.js"></script>
+</body>
+</html>

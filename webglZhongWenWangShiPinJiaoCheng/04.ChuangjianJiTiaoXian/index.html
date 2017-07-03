@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>04.创建n条线</title>
+    <style>
+        .stats {
+            position: absolute;
+            left: 0;
+            top:0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="div-canvas_wrap"></div>
+
+<script src="../public/js/three.js"></script>
+<script>
+
+    class Fn3D{
+
+        constructor(){
+
+            this.oScene=Object;
+            this.oCamera=Object;
+            this.oRenderer=Object;
+            this.oLight=Object;
+            this.oCube=Object;
+            this.oStats=Object;
+
+            this.settings={
+                nWidth:1400,
+                nHeight:600,
+                eDivCanvasWrap:Element
+            }
+
+        }
+
+        init(jOpt){
+
+            this.fnSetSettings(jOpt);
+            this.fnSetSceneInit();
+            this.fnSetCameraInit();
+            this.fnSetRendererInit();
+            this.fnSetLightInit();
+            this.fnSetCubeInit();
+            this.fnEnd();
+
+        }
+
+        fnSetSettings(jOpt){
+
+            for(let attr in jOpt){
+                this.settings[attr]=jOpt[attr];
+            }
+
+        }
+
+        fnSetSceneInit(){
+
+            this.oScene=new THREE.Scene();
+
+        }
+
+        fnSetCameraInit(){
+
+            this.oCamera=new THREE.PerspectiveCamera(45,this.settings.nWidth/this.settings.nHeight,1,10000);
+            this.oCamera.position.x=0;
+            this.oCamera.position.y=0;
+            this.oCamera.position.z=200;
+
+        }
+
+        fnSetRendererInit(){
+
+            this.oRenderer=new THREE.WebGLRenderer({
+                antialias:true
+            });
+            this.oRenderer.setSize(this.settings.nWidth,this.settings.nHeight);
+            this.settings.eDivCanvasWrap.appendChild(this.oRenderer.domElement);
+            this.oRenderer.setClearColor(0xFFFFFF, 1.0);
+        }
+
+        fnSetLightInit(){
+
+            this.oLight=new THREE.DirectionalLight(0xFF0000, 1.0, 0);
+            this.oLight.position.set(100, 100, 200);
+            this.oScene.add(this.oLight);
+
+        }
+
+        fnSetCubeInit(){
+
+            const oGeometry=new THREE.Geometry();//定义一个几何体
+            const oMaterial=new THREE.LineBasicMaterial({//定义线的基本材质为顶点颜色
+                vertexColors:true
+            });
+            const oColor1=new THREE.Color(0x000000),
+                    oColor2=new THREE.Color(0x0f0d43),
+                    oColor3=new THREE.Color(0x000000),
+                    oColor4=new THREE.Color(0x0f45d3);
+
+            const oPoint1=new THREE.Vector3(-50, 50, 0);
+            const oPoint2=new THREE.Vector3(50, 50, 0);
+            const oPoint3=new THREE.Vector3(50,-50,0);
+            const oPoint4=new THREE.Vector3(-50,-50,0);
+
+            oGeometry.vertices.push(oPoint1);
+            oGeometry.vertices.push(oPoint2);
+            oGeometry.vertices.push(oPoint3);
+            oGeometry.vertices.push(oPoint4);
+            oGeometry.vertices.push(oPoint1);
+            oGeometry.colors.push(oColor1,oColor2,oColor3,oColor4,oPoint1);
+
+            const oLine=new THREE.Line(oGeometry,oMaterial,THREE.LineStrip);
+            this.oScene.add(oLine);
+
+        }
+
+        fnEnd(){
+
+            this.oRenderer.clear();
+            this.oRenderer.render(this.oScene, this.oCamera);
+        }
+
+    }
+
+    const oop3D=new Fn3D();
+    oop3D.init({
+        eDivCanvasWrap:document.querySelector("#div-canvas_wrap")
+    });
+
+</script>
+</body>
+</html>

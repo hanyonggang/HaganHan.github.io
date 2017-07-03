@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="cube.css">
+    <style>
+        body{
+            height: 2000px;
+            position: relative;
+        }
+        #ul1{
+            width: 100px;
+            background-color: #cccccc;
+            border: 1px solid #999;
+            position: absolute;
+            line-height: 30px;
+            text-align: center;
+            font-size: 16px;
+            display: none;
+        }
+        li{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <ul id="ul1">
+        <li>登录</li>
+        <li>注册</li>
+        <li>删除</li>
+        <li>加入</li>
+        <li>闪人</li>
+        <li>印染</li>
+        <li>物流</li>
+    </ul>
+<script>
+    window.onload= function () {
+        var oUl=document.getElementById('ul1');
+        document.oncontextmenu = function (ev) {
+            var reScrollTop=document.documentElement.scrollTop||document.body.scrollTop;
+            var reScrollLeft=document.documentElement.scrollLeft||document.body.scrollLeft;
+            var oEvent=ev||event;
+            oUl.style['display']='block';
+            oUl.style['top']=reScrollTop+oEvent.clientY+'px';
+            oUl.style['left']=reScrollLeft+oEvent.clientX+'px';
+            return false
+        };
+        window.onscroll= function () {
+            oUl.style['display']='none'
+        };
+        document.onclick= function () {
+            oUl.style['display']="block"
+        };
+    };
+</script>
+</body>
+</html>

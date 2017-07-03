@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #txt1{
+            border: 1px solid#888;
+            display: block;
+        }
+        #txt2{
+
+            border: 1px solid #888;
+            line-height: 30px;
+            font-size: 16px;
+        }
+        #btn1{
+            width: 100px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <textarea id="txt1" rows="10" cols="40"></textarea>
+    <input type="text" id="txt2" placeholder="请输入文字">
+    <input type="button" id="btn1" value="提交">
+    <input type="button" id="btn2" value="清空">
+    <script>
+        var oTxt1=document.getElementById('txt1');
+        var oTxt2=document.getElementById('txt2');
+        var oBtn1=document.getElementById('btn1');
+        var oBtn2=document.getElementById('btn2');
+        oBtn1.onclick= function () {
+            oTxt1.value+=oTxt2.value+'\n';
+            oTxt2.value=''
+        };
+        oBtn2.onclick= function () {
+            oTxt1.value='';
+            oTxt2.value=''
+        };
+        oTxt2.onkeydown= function (ev) {
+            var oEvent=ev||event;
+            if(oEvent.keyCode==13&&oEvent.ctrlKey){
+                oTxt1.value+=oTxt2.value+'\n';
+                oTxt2.value=''
+            }
+        };
+    </script>
+</body>
+</html>

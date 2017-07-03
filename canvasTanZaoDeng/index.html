@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #canvas{
+            display: block;
+            margin: 10px auto;
+        }
+    </style>
+    <script>
+        var searchLight={x:400,y:400,r:150,vx:Math.random()*10+5,vy:Math.random()*10+5};
+        window.onload= function () {
+            var oCanvas=document.getElementById('canvas');
+            oCanvas.width=1300;
+            oCanvas.height=550;
+            var oContext=oCanvas.getContext('2d');
+            setInterval(function () {
+                draw(oContext);
+                update(oCanvas.width,oCanvas.height);
+            },40)
+
+        };
+        function draw(cxt) {
+            cxt.save();
+            var oCanvas=cxt.canvas;
+            //黑背景
+            cxt.clearRect(0,0,oCanvas.width,oCanvas.height);
+            cxt.beginPath();
+            cxt.fillStyle='#000';
+            cxt.fillRect(0,0,oCanvas.width,oCanvas.height);
+            //闪光灯
+            cxt.beginPath();
+            cxt.arc(searchLight.x,searchLight.y,searchLight.r,0,Math.PI*2);
+            cxt.fillStyle='#ddd';
+            cxt.fill();
+            cxt.clip();
+            //内容
+            cxt.beginPath();
+            cxt.font=' 41px 宋体';
+            cxt.fillStyle='#ff00ff';
+            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,100);
+            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,200);
+            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,300);
+            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,400);
+            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,500);
+            cxt.restore();
+        }
+        function update(oCanvasWidth,oCanvasHeight) {
+            searchLight.x+=searchLight.vx;
+            searchLight.y+=searchLight.vy;
+            if(searchLight.x+searchLight.r>=oCanvasWidth){
+                searchLight.x=oCanvasWidth-searchLight.r;
+                searchLight.vx=-searchLight.vx;
+            }
+            if(searchLight.x-searchLight.r<=0){
+                searchLight.x=0+searchLight.r;
+                searchLight.vx=-searchLight.vx;
+            }
+            if(searchLight.y+searchLight.r>=oCanvasHeight){
+                searchLight.y=oCanvasHeight-searchLight.r;
+                searchLight.vy=-searchLight.vy;
+            }
+            if(searchLight.y-searchLight.r<=0){
+                searchLight.y=0+searchLight.r;
+                searchLight.vy=-searchLight.vy;
+            }
+        }
+    </script>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>复习</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="div-canvas_par"></div>
+
+<script src="../public/js/three.js"></script>
+<script>
+
+    class FnCreateLine {
+
+        constructor() {
+
+            this.oScene = Object;
+            this.oCamera = Object;
+            this.oRenderer = Object;
+            this.oLight = Object;
+            this.oLine = Object;
+
+            this.settings = {//默认参数
+                nWidth: document.documentElement.clientWidth,
+                nHeight: document.documentElement.clientHeight,
+                bgc: "#aaa",
+                eCanvasPar: Element
+            }
+
+        }
+
+        init(jOpt) {
+
+            this.fnSetSettings(jOpt);
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnSetLight();
+            this.fnSetLine();
+//            this.fnRenderer();
+
+        }
+
+        fnSetSettings(jOpt) {
+
+            for (let sKey in jOpt) {
+
+                this.settings[sKey] = jOpt[sKey];
+
+            }
+
+        }
+
+        fnSetScene() {
+
+            this.oScene = new THREE.Scene();
+
+        }
+
+        fnSetCamera() {
+
+            this.oCamera = new THREE.PerspectiveCamera(45, this.settings.nWidth / this.settings.nHeight, 1, 100);
+            this.oCamera.position.x = 0;
+            this.oCamera.position.y = 0;
+            this.oCamera.position.z = 80;
+            this.oCamera.up.x = 0;
+            this.oCamera.up.y = 1;
+            this.oCamera.up.z = 0;
+            this.oCamera.lookAt({
+                x: 0,
+                y: 0,
+                z: 0
+            });
+
+        }
+
+        fnSetRenderer() {
+
+            this.oRenderer = new THREE.WebGLRenderer();
+            this.oRenderer.setSize(this.settings.nWidth, this.settings.nHeight);
+            this.settings.eCanvasPar.appendChild(this.oRenderer.domElement);
+            this.oRenderer.setClearColor(this.settings.bgc, 1.0);
+
+        }
+
+        fnSetLight() {
+
+            this.oLight = new THREE.DirectionalLight(0xFF0000, 1.0, 0);
+            this.oLight.position.set(70, 70, 70);
+
+            this.oScene.add(this.oLight);
+
+        }
+
+        fnSetLine() {
+
+            const oGeometry = new THREE.Geometry();
+
+            const oLineBasicMaterial = new THREE.LineBasicMaterial({
+                vertexColors: true
+            });
+
+            const oColor1 = new THREE.Color("#0f0ff0"),
+                    oColor2 = new THREE.Color("f000ff");
+
+            const oPoint1 = new THREE.Vector3(20, 60, 0),
+                    oPoint2 = new THREE.Vector3(-20, -60, 0);
+
+            oGeometry.vertices.push(oPoint1);
+            oGeometry.vertices.push(oPoint2);
+            oGeometry.colors.push(oColor1,oColor2);
+
+            this.oLine=new THREE.Line(oGeometry,oLineBasicMaterial,THREE.LinePieces);
+            this.oScene.add(this.oLine);
+
+        }
+
+        fnRenderer(){
+
+            this.oRenderer.clear();
+            this.oRenderer.render(this.oScene,this.oCamera);
+
+        }
+
+    }
+
+    const oopCreateLine=new FnCreateLine();
+    oopCreateLine.init({
+        eCanvasPar:document.querySelector("#div-canvas_par")
+    });
+
+</script>
+</body>
+</html>

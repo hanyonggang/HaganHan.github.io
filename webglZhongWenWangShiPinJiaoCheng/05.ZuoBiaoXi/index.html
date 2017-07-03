@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>坐标系</title>
+    <style>
+        .stats {
+            position: absolute;
+            left: 0;
+            top:0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="div-canvas_wrap"></div>
+
+<script src="../public/js/three.js"></script>
+<script src="../public/js/stats.js"></script>
+<script src="../public/js/tween.min.js"></script>
+<script>
+
+    class Fn3D{
+
+        constructor(){
+
+            this.oScene=Object;
+            this.oCamera=Object;
+            this.oRenderer=Object;
+            this.oMesh=Object;
+            this.oObject3D=Object;
+            this.oStats=Object;
+
+            this.settings={
+                nWidth:1400,
+                nHeight:600,
+                eDivCanvasWrap:Element
+            }
+
+        }
+
+        init(jOpt){
+
+            this.fnSetSettings(jOpt);
+            this.fnSetScene();
+            this.fnSetCamera();
+            this.fnSetRenderer();
+            this.fnAddLight();
+            this.fnAddObject3D();
+            this.fnAddCube();
+            this.fnAddAxisHelper();
+            this.fnSetTween();
+            this.fnSetStats();
+            this.fnRender();
+
+        }
+
+        fnSetSettings(jOpt){
+
+            for(let attr in jOpt){
+                this.settings[attr]=jOpt[attr];
+            }
+
+        }
+
+        fnSetScene(){
+
+            this.oScene=new THREE.Scene();
+
+        }
+
+        fnSetCamera(){
+
+            this.oCamera=new THREE.PerspectiveCamera(45,this.settings.nWidth/this.settings.nHeight,1,10000);
+            this.oCamera.position.x=2;
+            this.oCamera.position.y=1;
+            this.oCamera.position.z=10;
+
+        }
+
+        fnSetRenderer(){
+
+            this.oRenderer=new THREE.WebGLRenderer({
+                antialias:true
+            });
+            this.oRenderer.setSize(this.settings.nWidth,this.settings.nHeight);
+            this.settings.eDivCanvasWrap.appendChild(this.oRenderer.domElement);
+            this.oRenderer.setClearColor(0xFFFFFF, 1.0);
+        }
+
+        fnAddLight(){
+
+            const oLight=new THREE.DirectionalLight(0xFF0000, 1.0, 0);
+            oLight.position.set(100, 100, 200);
+            this.oScene.add(oLight);
+
+        }
+
+        fnAddObject3D(){
+
+            this.oObject3D=new THREE.Object3D();
+
+        }
+
+        fnAddCube(){
+
+            const oCubeGeometry=new THREE.CubeGeometry(2,2,2);//定义一个几何体
+            const oMeshBasicMaterial=new THREE.MeshLambertMaterial({color:0xff00ff});
+
+            this.oMesh=new THREE.Mesh(oCubeGeometry,oMeshBasicMaterial);
+            this.oMesh.position.x=1;
+            this.oMesh.position.y=2;
+            this.oMesh.position.z=-1;
+            this.oObject3D.add(this.oMesh);
+
+        }
+
+        fnAddAxisHelper(){
+
+            const axisHelper=new THREE.AxisHelper(4);
+            this.oScene.add(axisHelper);
+
+        }
+
+        fnSetTween(){
+
+            new TWEEN.Tween(this.oCamera.position)
+                    .to({x:4},3000).repeat(3).start();
+
+        }
+
+        fnSetStats(){
+            this.oStats=new Stats();
+            this.oStats.domElement.className="stats";
+            document.body.appendChild(this.oStats.domElement);
+        }
+
+        fnRender(){
+            const This=this;
+            this.oScene.add(this.oObject3D);
+            function fnRender() {
+                This.oStats.begin();
+                TWEEN.update();
+                This.oObject3D.rotation.x+=0.01;
+                This.oObject3D.rotation.y+=0.02;
+                This.oObject3D.rotation.z+=0.03;
+                This.oMesh.rotation.x+=0.08;
+                This.oMesh.rotation.y+=0.07;
+                This.oMesh.rotation.z+=0.03;
+                This.oRenderer.clear();
+                This.oRenderer.render(This.oScene, This.oCamera);
+                requestAnimationFrame(fnRender);
+                This.oStats.end();
+            }
+            fnRender()
+
+        }
+
+    }
+
+    const oop3D=new Fn3D();
+    oop3D.init({
+        eDivCanvasWrap:document.querySelector("#div-canvas_wrap")
+    });
+
+</script>
+</body>
+</html>

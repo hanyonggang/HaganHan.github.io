@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <style>
+        article {
+            margin: 30px auto;
+            width:300px;
+        }
+        article > div {
+            top:50px;
+        }
+        div {
+            top:32px;
+        }
+        h2 {
+            height:50px;
+            background-color: #f03;
+            text-align: center;
+            font:16px/50px "微软雅黑";
+            color: #ffffff;
+        }
+        h3 {
+            width: 300px;
+            height:30px;
+            font: 16px/30px "宋体";
+            background-color: #ccc;
+            text-indent: 15px;
+            transition: .4s;
+            color: #fff;
+            cursor: pointer;
+        }
+        h3:hover {
+            background-color: #999;
+            text-indent: 30px;
+        }
+    </style>
+</head>
+<body>
+<button id="button-open_btn">展开</button>
+<button id="button-shrink_btn">收缩</button>
+<article id="article-paper_wrap" class="g-3d_paper_wrap">
+    <h2>标题</h2>
+    <div>
+        <h3>第一项</h3>
+        <div>
+            <h3>第二项</h3>
+            <div>
+                <h3>第三项</h3>
+                <div>
+                    <h3>第四项</h3>
+                    <div>
+                        <h3>第五项</h3>
+                        <div>
+                            <h3>第六项</h3>
+                            <div>
+                                <h3>第七项</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+
+<script src="js/hquery-3.1.10.js"></script>
+<script src="js/index.webpack.js"></script>
+</body>
+</html>

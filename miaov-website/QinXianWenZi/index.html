@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="reset.css">
+    <style>
+        .g-list {
+            width: 302px;
+            margin: 50px auto;
+        }
+        .g-list li {
+            height:40px;
+            font: 12px/40px "宋体";
+            border: 1px solid;
+            position: relative;
+            cursor: pointer;
+        }
+        .g-list span {
+            width: 12px;
+            height: 12px;
+            line-height:12px;
+        }
+    </style>
+</head>
+<body>
+<ul id="ul-list" class="g-list">
+    <li>妙味妙味课堂妙味课堂妙味课堂妙味课堂</li>
+    <li>妙妙味课堂妙味课堂妙味课堂妙味课堂去啊我打算</li>
+    <li>妙味课堂妙味课堂妙味课啊首发身份打算</li>
+    <li>妙味课堂发生发首发发身份打算身份分啊首</li>
+    <li>妙味味课堂课堂发生发首课堂发生发打算身份分啊首</li>
+</ul>
+<script>
+    const eUl=document.querySelector("#ul-list");
+    const eLiS=eUl.querySelectorAll("li");
+    const nLiHeight=eLiS[0].offsetHeight;
+    for(let i=0;i<eLiS.length;i++){
+        const sText=eLiS[i].innerHTML;
+        eLiS[i].innerHTML="";
+        for(let j=0;j<sText.length;j++){
+            eLiS[i].innerHTML+=`<span>${sText[j]}</span>`
+        }
+        const eSpanS=eLiS[i].querySelectorAll("span");
+        const nSpanHeight=eSpanS[0].offsetHeight;
+        for(let j=0;j<eSpanS.length;j++){
+            eSpanS[j].style.left=eSpanS[j].offsetLeft+"px";
+            eSpanS[j].style.top=eSpanS[j].offsetTop+"px";
+        }
+        for(let j=0;j<eSpanS.length;j++){
+            eSpanS[j].style.position="absolute";
+            let nSpanTop=eSpanS[j].offsetTop;
+            let nStartY;
+            eSpanS[j].onmouseover=function (ev) {
+                for(let k=0;k<eSpanS.length;k++){
+                    eSpanS[k].style.transition="0s";
+                }
+                nStartY=ev.clientY;
+            };
+            eSpanS[j].onmousemove=function (ev) {
+                const nMoveY=ev.clientY;
+                const nTop=nMoveY-nStartY+nSpanTop;
+                const num=nTop-nSpanTop>0?1:-1;
+                document.title=nTop;
+                if(nTop<0||nTop>nLiHeight-nSpanHeight){
+                    eSpanS[j].onmouseout();
+                }else {
+                    for(let k=0;k<eSpanS.length;k++){
+                        const nTopIng=Math.abs(j-k);
+
+                        if(Math.abs(nTop-nSpanTop)>Math.abs(k-j)){
+                            eSpanS[k].style.top=nTop-nTopIng*num+"px";
+                        }
+                    }
+                }
+            };
+            eSpanS[j].onmouseout=function () {
+                for(let k=0;k<eSpanS.length;k++){
+                    eSpanS[k].style.transition="0.2s cubic-bezier(0.360, 1.070, 0.915, 1.395)";
+                    eSpanS[k].style.top=nSpanTop+"px";
+                }
+            };
+        }
+    }
+</script>
+</body>
+</html>

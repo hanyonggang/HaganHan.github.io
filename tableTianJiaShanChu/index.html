@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        window.onload= function () {
+            var oTabnle=document.getElementsByTagName('table')[0];
+            var oBtn=document.getElementsByTagName('input')[1];
+            var oTxt=document.getElementsByTagName('input')[0];
+            var is=oTabnle.tBodies[0].rows.length+1;
+            oBtn.onclick= function () {
+                var oTr=document.createElement('tr');
+                var oTd=null;
+                oTd=document.createElement('td');
+                oTd.innerHTML=is;
+                oTr.appendChild(oTd);
+                oTd=document.createElement('td');
+                oTd.innerHTML=oTxt.value;
+                oTr.appendChild(oTd);
+                oTd=document.createElement('td');
+                oTd.innerHTML='<a href="javascript:;">删除</a>';
+                oTr.appendChild(oTd);
+                oTabnle.tBodies[0].appendChild(oTr);
+                var oBtnA=oTd.getElementsByTagName('a')[0];
+                oBtnA.onclick= function () {
+                    oTabnle.tBodies[0].removeChild(this.parentNode.parentNode)
+                };
+                is++;
+            };
+        };
+    </script>
+</head>
+<body>
+    <form>
+        <input type="text">
+        <input type="button" value="添加">
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>年龄</th>
+                <th>姓名</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>20</td>
+                <td>小韩</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>20</td>
+                <td>龙龙</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>20</td>
+                <td>小标</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

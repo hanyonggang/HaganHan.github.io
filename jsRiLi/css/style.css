@@ -1,0 +1,66 @@
+body{
+    background-color: #F6F9FC;
+}
+#fatherOne{
+    padding: 20px 15px;
+    background-color: #EAE9E9;
+    width: 210px;
+    margin: 30px auto;
+}
+h2{
+    line-height: 42px;
+    font-size: 24px;
+    font-weight: bold;
+}
+p{
+    line-height: 4px;
+    font-size: 15px;
+}
+.div1{
+    padding: 5px;
+    float: left;
+    width:60px;
+    height:60px;
+}
+ul{
+    width: 210px;
+}
+#txt{
+    width: 187px;
+    background-color: #f1f1f1;
+    margin: 5px;
+    border: 1px solid #ffffff;
+    padding-left: 12px;
+}
+#txt>h2{
+    font-size: 14px;
+    font-weight: normal;
+    font-family: "arial";
+    color: #555;
+    line-height: 42px;
+    font-weight: bold;
+}
+#txt>p{
+    font-size: 12px;
+    color: #555555;
+    line-height: 18px;
+    margin-bottom: 14px;
+}
+li{
+    float: left;
+    width:59px;
+    height:59px;
+    text-align: center;
+    font-family: 'Arial';
+    cursor: pointer;
+}
+.yichu{
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #444;
+}
+.yiru{
+    background-color: #fff;
+    color: #E84A7E;
+    border: 1px solid #000;
+}

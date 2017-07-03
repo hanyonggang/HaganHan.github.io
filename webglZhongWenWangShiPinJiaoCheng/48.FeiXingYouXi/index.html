@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>飞行游戏</title>
+    <style>
+
+        body {
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            color: #222;
+            background-color: #BBB;
+            font-family: arial;
+            font-size: 100%;
+        }
+
+        .g-article section {
+            position: absolute;
+            background-color: rgba(1, 1, 1, 1);
+            color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 20px #0000FF;
+            left: 50%;
+            top: 50%;
+            margin-left: -200px;
+            margin-top: -170px;
+            border-radius: 10px;
+            width: 400px;
+            height: 200px;
+        }
+
+        h1 {
+            color: #999
+        }
+
+        a {
+            display: inline-block;
+            width: 120px;
+            height: 20px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 2px;
+            text-decoration: none;
+            background-color: #ff5400;
+            color: black
+        }
+
+        a:hover {
+            background-color: red;
+            color: black
+        }
+
+        .z-none {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+<article class="g-article">
+
+    <div id="div-canvas_par"></div>
+
+    <section class='m-win z-none' id='div-win'>
+        <h1>恭喜您!</h1>
+        <h2>您赢了 :)</h2>
+        <a id="a-win" href='javascript:;'>重玩</a>
+    </section>
+    <section class='m-re_start z-none' id='div-re_start'>
+        <img src='./../public/image/fly_game-re_start.png' style='float: right'/>
+        <h1>菜鸟 !</h1>
+        <a id="a-re_start" href='javascript:;'>再来一次</a>
+    </section>
+    <section class='m-start z-none' id='div-start'>
+        <h1>飞行游戏</h1>
+        <img src='./../public/image/fly_game-arrow_keys.png' style='float: right'/>
+        <p>穿过高楼大厦，别掉下来了:),方向键控制,玩10次以上才算入门哦。</p>
+        <a id="a-start" href='javascript:;'>开始</a>
+    </section>
+</article>
+
+<script src="./../public/js/three.js"></script>
+<script>
+
+    /*
+     * game实现思路
+     * 1.游戏类FnGame:负责游戏的初始化,开始和结束等
+     * 2.地图类FnMaps:负责储存地图数据,关卡数据,碰撞检测
+     * 3.飞行器飞行类FnNavigation
+     * 游戏的状态机
+     * */
+
+    class FnGame {
+
+        constructor(eDivStart,eBtnStart,eDivReStart,eBtnReStart,eDivWin,eBtnWin){
+
+            this.eDivStart=eDivStart;
+            this.eBtnStart=eBtnStart;
+            this.eDivReStart=eDivReStart;
+            this.eBtnReStart=eBtnReStart;
+            this.eDivWin=eDivWin;
+            this.eBtnWin=eBtnWin;
+
+            this.bRunning=false;
+
+            /*this.fnInit();*/
+
+        }
+
+        fnInit(){
+
+            this.fnShowStart();
+            /*this.fnHideStart();*/
+            this.fnBtnStartClick();
+            this.fnBtnReStartClick();
+            this.fnBtnWinClick();
+            /*this.fnPlayMusic();*/
+
+        }
+
+        fnShowStart(){
+
+            this.eDivStart.classList.remove("z-none");
+
+        }
+
+        fnBtnStartClick(){
+
+            const This=this;
+
+            this.eBtnStart.onclick=function () {
+
+                This.eDivStart.classList.add("z-none");
+                This.fnPlayMusic();
+
+            };
+
+        }
+
+        fnBtnReStartClick(){
+
+            const This=this;
+
+            this.eBtnReStart.onclick=function () {
+
+                This.eDivReStart.classList.add("z-none");
+                This.fnPlayMusic();
+
+            };
+
+        }
+
+        fnBtnWinClick(){
+
+            const This=this;
+
+            this.eBtnWin.onclick=function () {
+
+                This.eDivWin.classList.add("z-none");
+                This.fnPlayMusic();
+
+            };
+
+        }
+
+        fnPlayMusic(){
+
+
+
+        }
+
+    }
+
+    const eDivStart=document.querySelector("#div-start"),
+            eBtnStart=document.querySelector("#a-start"),
+            eDivReStart=document.querySelector("#div-re_start"),
+            eBtnReStart=document.querySelector("#a-re_start"),
+            eDivWin=document.querySelector("#div-win"),
+            eBtnWin=document.querySelector("#a-win");
+
+
+    const oopGame=new FnGame(eDivStart,eBtnStart,eDivReStart,eBtnReStart,eDivWin,eBtnWin);
+    oopGame.fnInit();
+
+</script>
+</body>
+</html>
