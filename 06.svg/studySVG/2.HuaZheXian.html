@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>折线</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height:100%;
+        }
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<svg  xmlns="http://www.w3.org/2000/svg">
+
+    <polyline points="" stroke="red" stroke-width="2" fill="none"></polyline>
+    <circle r="6" fill="#fff" stroke="#3df" stroke-width="2"></circle>
+
+</svg>
+<script>
+
+    const eSvg=document.querySelector("svg");
+    const ePolyLine=document.querySelector("polyline");
+    let sPoints=ePolyLine.getAttribute("points");
+
+    eSvg.onmousedown=function (evDown) {
+
+        const nX=evDown.clientX-eSvg.clientLeft;
+        const nY=evDown.clientY-eSvg.clientTop;
+
+        sPoints+=` ${nX},${nY}`;
+        ePolyLine.setAttribute("points",sPoints);
+
+        const eCircle=document.createElementNS("http://www.w3.org/2000/svg","circle");
+        eCircle.setAttribute("cx",nX);
+        eCircle.setAttribute("cy",nY);
+        eCircle.setAttribute("r","6");
+        eCircle.setAttribute("fill","#fff");
+        eCircle.setAttribute("stroke","#3df");
+        eCircle.setAttribute("stroke-width","2");
+
+        eSvg.appendChild(eCircle);
+
+        eSvg.onmousemove=function (evMove) {
+
+            const nX=evMove.clientX-eSvg.clientLeft;
+            const nY=evMove.clientY-eSvg.clientTop;
+
+            ePolyLine.setAttribute("points",sPoints+` ${nX},${nY}`);
+
+        };
+
+    };
+
+    eSvg.oncontextmenu=function (evMenu) {
+        eSvg.onmousemove=null;
+        return false;
+    }
+
+</script>
+</body>
+</html>

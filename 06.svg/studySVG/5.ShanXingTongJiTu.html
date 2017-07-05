@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>5.创建一个环形统计图jq动画</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        svg, html, body,article {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<article id="article-svgPar">
+    <svg id="svg-svg" xmlns="http://www.w3.org/2000/svg">
+
+    </svg>
+</article>
+<script src="jquery-1.11.1.min.js"></script>
+<script>
+
+    var sSvgXmlNS="http://www.w3.org/2000/svg";
+
+    var eArticleSvgPar=document.querySelector("#article-svgPar");
+    var eSvgSvg=document.querySelector("#svg-svg");
+
+    function fnCreateSvgTag(sTagName, jOpt) {
+        var eSvgTag=document.createElementNS(sSvgXmlNS,sTagName);
+        for(var sKey in jOpt){
+            eSvgTag.setAttribute(sKey,jOpt[sKey]);
+        }
+        return eSvgTag;
+    }
+
+    var aNum=[15,30,40,15];
+    var nAngle=360;
+    var nOuterR=120;
+    var nInnerR=70;
+    var nCenterX=200;
+    var nCenterY=200;
+    var aColor=["red","blue","yellow","green","black","gray"];
+
+    for(var i=0;i<aNum.length;i++){
+
+        var ePath=fnCreateSvgTag("path",{fill:aColor[i]});
+        eSvgSvg.appendChild(ePath);
+
+    }
+
+    var ePathS=eSvgSvg.querySelectorAll("path");
+
+    /*
+    * jquery animate给样式来用的
+    * */
+//    $("#article-svgPar").animate({width:200},1000,"linear",function () {
+//
+//    });
+
+    /*
+    * jquery animate不给样式时的用法
+    * */
+    $("#article-svgPar").animate({
+        move:"auto"
+    },{
+        duration:1000,//运动时间
+        easing:"swing",//运动形式linear
+        step:function (a, b) {
+
+            var nSumNum=0;
+            var aOuterXY=[
+                {x:320,y:200}
+            ];
+            var aInnerXY=[
+                {x:270,y:200}
+            ];
+
+            //b.pos 0-1之间不断运动的一个值
+
+            for(var i=0;i<aNum.length;i++){
+
+                var nAngleNum=aNum[i]/100*nAngle;
+
+                nSumNum+=nAngleNum;
+
+                if(i===aNum.length-1){
+                    nSumNum=360;
+                }
+
+                var nOuterX=Math.cos(nSumNum*b.pos*Math.PI/180)*nOuterR+nCenterX;
+                var nOuterY=Math.sin(nSumNum*b.pos*Math.PI/180)*nOuterR+nCenterY;
+                aOuterXY.push({x:nOuterX,y:nOuterY});
+
+                var nInnerX=Math.cos(nSumNum*b.pos*Math.PI/180)*nInnerR+nCenterX;
+                var nInnerY=Math.sin(nSumNum*b.pos*Math.PI/180)*nInnerR+nCenterY;
+                aInnerXY.push({x:nInnerX,y:nInnerY});
+            }
+
+            for(var i=0;i<aOuterXY.length;i++){
+
+                if(i==aOuterXY.length-1){
+                    break;
+                }
+
+                ePathS[i].setAttribute("d","M"+aOuterXY[i].x+","+aOuterXY[i].y+" A"+nOuterR+","+nOuterR+","+"0,0,1,"+aOuterXY[i+1].x+","+aOuterXY[i+1].y+" L"+aInnerXY[i+1].x+","+aInnerXY[i+1].y+" A"+nInnerR+","+nInnerR+",0,0,0,"+aInnerXY[i].x+","+aInnerXY[i].y)
+
+            }
+
+        }
+    });
+
+
+
+</script>
+</body>
+</html>
