@@ -1,0 +1,12 @@
+以技术分类
+1.canvas 主要使用html5 canvas制作的效果
+2.cookie 主要使用cookie制作的效果
+3.css 主要使用css制作的效果
+4.dom 主要使用dom制作的效果
+5.drag 主要使用html5中的拖拽制作的效果
+6.svg 主要使用svg制作的效果
+7.scrollBar 关于滚动条的技术
+8.all 包含多个分类
+9.algorithm 主要使用复杂算法制作的效果
+10.webgl 主要使用webgl制作的效果
+11.mouse 主要使用鼠标制作的效果
