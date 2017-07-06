@@ -46,8 +46,8 @@
       <file leaf-file-name="18.mina().html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/18.mina().html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+            <state relative-caret-position="220">
+              <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -266,12 +266,12 @@
       <workItem from="1499131927474" duration="14545000" />
       <workItem from="1499224813301" duration="11481000" />
       <workItem from="1499246823481" duration="1867000" />
-      <workItem from="1499301990228" duration="10450000" />
+      <workItem from="1499301990228" duration="10705000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40694000" />
+    <option name="totallyTimeSpent" value="40949000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -535,8 +535,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/18.mina().html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+        <state relative-caret-position="220">
+          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
           <folding />
         </state>
       </provider>
