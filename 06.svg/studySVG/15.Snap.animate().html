@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body, svg {
+            width: 100%;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+<svg id="svg" width="100" height="100"></svg>
+
+<input id="button" type="button" class="zxx_api_button" value="点击水平位移">
+<script src="js/snap.svg-min.js"></script>
+
+<script>
+    var rect = Snap("#svg").paper.rect(0, 20, 60, 40);
+
+    document.getElementById("button").onclick = function() {
+        Snap.animate(0, 820, function (val) {
+            document.title=val;
+            rect.attr({
+                x: val
+            });
+        }, 2000);
+        // 以上代码，类似于下面的效果
+        // rect.animate({x: 20}, 1000);
+        // 显然，上面的更强大，更灵活；下面的则是简单易懂
+    };
+</script>
+</body>
+</html>

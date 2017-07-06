@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body, svg {
+            width: 100%;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+
+<svg id="svg" width="300" height="100"></svg>
+
+<script src="js/snap.svg-min.js"></script>
+
+<script>
+    var svg = Snap("#svg");
+    var g1 = svg.paper.gradient("l(0, 0, 1, 1)#000-#f00-#fff");
+    svg.paper.circle(50, 50, 40).attr({
+        fill: g1
+    });
+    var g2 = svg.paper.gradient("L(0, 0, 100, 100)#000-#f00:25-#fff");
+    svg.paper.circle(150, 50, 40).attr({
+        fill: g2
+    });
+    var g3 = svg.paper.gradient("r(0.5, 0.5, 0.5)#000-#fff");
+    svg.paper.circle(250, 50, 40).attr({
+        fill: g3
+    });
+</script>
+</body>
+</html>

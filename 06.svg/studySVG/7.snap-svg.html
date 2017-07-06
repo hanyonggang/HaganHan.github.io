@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html, body, svg {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+<svg id="svg-container"></svg>
+<script src="js/snap.svg-min.js"></script>
+<script>
+
+    var oSnap= Snap("#svg-container");
+
+    var oCircleBig=oSnap.circle(150,150,100);//创建大圆 x y r
+    oCircleBig.attr({//给大圆设置属性
+        fill:"#ffd4d0",
+        stroke:"#000",
+        strokeWidth:4
+    });
+
+    var oCircleSmall=oSnap.circle(100,150,70);//创建小圆1
+    var oGroupDiscs=oSnap.group(oCircleSmall,oSnap.circle(200,150,70));//创建小圆2并把小圆1一起添加到一个组
+    oGroupDiscs.attr({//给这个组设置公共属性
+        fill:"#fff"
+    });
+
+    oCircleBig.attr({//给大圆设置遮罩层
+        mask:oGroupDiscs
+    });
+
+    oCircleSmall.animate({//给小圆1设置动画
+        r:50
+    },1000);
+
+    oGroupDiscs.select("circle:nth-child(2)").animate({//选择组里的第二个小圆并设置动画
+        r:50
+    },1000);
+
+    var oPath=oSnap.path("M10-5-10,15M15,0,0,15M0-5-20,15").attr({//设置一个纹理
+        fill:"none",
+        stroke:"#bada55",
+        strokeWidth:5
+    });
+    oPath=oPath.pattern(0,0,10,10);
+
+    oCircleBig.attr({//給大圆赋值纹理
+        fill:oPath
+    });
+
+    oGroupDiscs.attr({//从页面抓取纹理进行填充
+        fill:Snap("#pattern")
+    });
+
+    oGroupDiscs.attr({//填充渐变色 每个圆有两个渐变
+        fill:"r()#fff-#000"
+    });
+
+    oGroupDiscs.attr({//填充渐变色 共享一个渐变
+        fill:"R(150, 150, 100)#fff-#000"
+    });
+
+</script>
+</body>
+</html>

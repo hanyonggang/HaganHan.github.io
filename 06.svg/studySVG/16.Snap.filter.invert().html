@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body, svg {
+            width: 100%;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+
+<svg id="svg" width="300" height="210"></svg>
+
+<script src="js/snap.svg-min.js"></script>
+
+<script>
+    var svg = Snap("#svg");
+    // 显示图片
+    var image = svg.paper.image("images/mm.jpg", 10, 10, 256, 191);
+    // 反相滤镜, 100%
+    var f = svg.paper.filter(Snap.filter.invert(1));
+//    // 应用在图片上
+    image.attr({
+        filter: f
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body, svg {
+            width: 100%;
+            height:800px;
+        }
+        input {
+            position: fixed;
+            left: 0;
+            top:0;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+
+<svg id="svg" width="200" height="100"></svg>
+
+<input id="button" type="button" class="zxx_api_button" value="点击运行">
+
+<script src="js/snap.svg-min.js"></script>
+
+<script>
+    var c1 = Snap("#svg").paper.circle(50,50,40).attr({ fill: "red" });
+    var c2 = Snap("#svg").paper.circle(50,150,40).attr({ fill: "red" });
+    var c3 = Snap("#svg").paper.circle(50,250,40).attr({ fill: "red" });
+    var c4 = Snap("#svg").paper.circle(50,350,40).attr({ fill: "red" });
+    var c5 = Snap("#svg").paper.circle(50,450,40).attr({ fill: "red" });
+    var c6 = Snap("#svg").paper.circle(50,550,40).attr({ fill: "red" });
+    var c7 = Snap("#svg").paper.circle(50,650,40).attr({ fill: "red" });
+    var c8 = Snap("#svg").paper.circle(50,750,40).attr({ fill: "red" });
+
+    document.getElementById("button").onclick = function() {
+        var now = mina.time();
+        var ani1 = mina(50, 300, now, now + 1000, mina.time, function(val) {
+            c1.attr({
+                cx: val
+            });
+            document.title=val;
+        }, mina.backin);
+        var ani2 = mina(50, 300, now, now + 1000, mina.time, function(val) {
+            c2.attr({
+                cx: val
+            });
+            document.title=val;
+        }, mina.backout);
+        var ani3 = mina(50, 300, now, now + 1000, mina.time, function(val) {
+            c3.attr({
+                cx: val
+            });
+            document.title=val;
+        }, mina.bounce);
+        var ani4 = mina(50, 300, now, now + 1000, mina.time, function(val) {
+            c4.attr({
+                cx: val
+            });
+            document.title=val;
+        }, mina.easein);
+        var ani5 = mina(50, 300, now, now + 1000, mina.time, function(val) {
+            c5.attr({
+                cx: val
+            });
+            document.title=val;
+        }, mina.easeinout);
+        var ani6 = mina(50, 300, now, now + 1000, mina.time, function(val) {
+            c6.attr({
+                cx: val
+            });
+            document.title=val;
+        }, mina.easeout);
+        var ani7 = mina(50, 300, now, now + 1000, mina.time, function(val) {
+            c7.attr({
+                cx: val
+            });
+            document.title=val;
+        }, mina.elastic);
+        var ani8 = mina(50, 300, now, now + 1000, mina.time, function(val) {
+            c8.attr({
+                cx: val
+            });
+            document.title=val;
+        }, mina.linear);
+    };
+</script>
+</body>
+</html>
