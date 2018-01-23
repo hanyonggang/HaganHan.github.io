@@ -2,23 +2,29 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>致同桌</title>
     <style>
         *{
             margin: 0;
             padding: 0;
         }
         #canvas{
+            width: 100%;
+            height:100%;
             display: block;
-            margin: 10px auto;
+            /*margin: 10px auto;*/
+        }
+        html, body {
+            width: 100%;
+            height:100%;
         }
     </style>
     <script>
         var searchLight={x:400,y:400,r:150,vx:Math.random()*10+5,vy:Math.random()*10+5};
         window.onload= function () {
             var oCanvas=document.getElementById('canvas');
-            oCanvas.width=1300;
-            oCanvas.height=550;
+            oCanvas.width=750;
+            oCanvas.height=1206;
             var oContext=oCanvas.getContext('2d');
             setInterval(function () {
                 draw(oContext);
@@ -44,11 +50,19 @@
             cxt.beginPath();
             cxt.font=' 41px 宋体';
             cxt.fillStyle='#ff00ff';
-            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,100);
-            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,200);
-            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,300);
-            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,400);
-            cxt.fillText('雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！雪梅雪梅你最棒！',0,500);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,100);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,200);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,300);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,400);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,500);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,600);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,700);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,800);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,900);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,1000);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,1100);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,1200);
+            cxt.fillText('同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！同桌同桌我错了！',0,1300);
             cxt.restore();
         }
         function update(oCanvasWidth,oCanvasHeight) {
@@ -75,5 +89,73 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
+    <audio id="audio-bg_music" loop src="./对面的同桌看过来.mp3" style="position: absolute;left: -1000px;bottom:-1000px;"></audio>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
+    <script>
+
+        var globalAudio=document.getElementById("audio-bg_music");//解决ios音乐不自动播放的问题
+        globalAudio.play();
+        var wxShare = {
+            title: "致我最美丽的李琦同桌",
+            desc: "对面的同桌看过来，看过来看过来～",
+            link: window.location.href,
+            imgUrl: "http://cxd.e.360.cn/static-nginx/business/liqi/head.jpg"
+        };
+
+        axios.get("/wechat/getData")
+            .then((res) => {
+            var data = res.data.data;
+        console.log(data);
+        //            alert(res.data.message);
+
+        /* 微信分享start */
+        wx.config({
+            debug: false,
+            appId: data.appId,
+            timestamp: data.timestamp,
+            nonceStr: data.nonceStr,
+            signature: data.signature,
+            jsApiList: [
+                "onMenuShareTimeline",
+                "onMenuShareAppMessage"
+            ]
+        });
+        wx.ready(function () {
+            var globalAudio=document.getElementById("audio-bg_music");//解决ios音乐不自动播放的问题
+            globalAudio.play();
+            // 在这里调用 API
+            wx.onMenuShareTimeline({
+                title: wxShare.title, // 分享标题
+                link: wxShare.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: wxShare.imgUrl, // 分享图标
+                success: function () {
+//                        alert('分享至朋友圈成功')
+                },
+                cancel: function () {
+//                        alert('取消了分享至朋友圈')
+                }
+            });
+            wx.onMenuShareAppMessage({
+                title: wxShare.title, // 分享标题
+                desc: wxShare.desc, // 分享描述
+                link: wxShare.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: wxShare.imgUrl, // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+//                        alert("分享给好友成功");
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+//                        alert("取消了分享给好友");
+                }
+            });
+        });
+        /* 微信分享end */
+
+        });
+    </script>
 </body>
 </html>
