@@ -1,0 +1,17 @@
+/node_modules
+*/node_modules
+/.idea
+*/.idea
+/.wing
+*/.wing
+/design
+/database
+/db
+.DS_Store
+*/.DS_Store
+/bin-release
+*/bin-release
+/bin-debug
+*/bin-debug
+*.gz
+*/*.gz
